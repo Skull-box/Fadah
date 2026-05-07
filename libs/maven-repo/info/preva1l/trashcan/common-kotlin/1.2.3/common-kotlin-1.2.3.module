@@ -1,0 +1,81 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "info.preva1l.trashcan",
+    "module": "common-kotlin",
+    "version": "1.2.3",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "8.14"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 21,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "files": [
+        {
+          "name": "common-kotlin-1.2.3.jar",
+          "url": "common-kotlin-1.2.3.jar",
+          "size": 261,
+          "sha512": "5a633bf5227379663dbe4a89465e44ae725c8ce6045db14cf046fd9d11da7d89b1b8109449d9f4d3cacab213611acc0683b9b134aa67506e4feb729d762ca515",
+          "sha256": "3e4f0b24ab88cd294583159238b4a97120aa6e70d4541f1b89daaa3103b574ab",
+          "sha1": "7b5167ef9f6cbc74a113841cf9123141db9a44f8",
+          "md5": "69a90ee51c0b494717979c872dc9dfb0"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 21,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "common-kotlin-1.2.3.jar",
+          "url": "common-kotlin-1.2.3.jar",
+          "size": 261,
+          "sha512": "5a633bf5227379663dbe4a89465e44ae725c8ce6045db14cf046fd9d11da7d89b1b8109449d9f4d3cacab213611acc0683b9b134aa67506e4feb729d762ca515",
+          "sha256": "3e4f0b24ab88cd294583159238b4a97120aa6e70d4541f1b89daaa3103b574ab",
+          "sha1": "7b5167ef9f6cbc74a113841cf9123141db9a44f8",
+          "md5": "69a90ee51c0b494717979c872dc9dfb0"
+        }
+      ]
+    },
+    {
+      "name": "shadowRuntimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "shadowed",
+        "org.gradle.jvm.version": 21,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "common-kotlin-1.2.3.jar",
+          "url": "common-kotlin-1.2.3.jar",
+          "size": 261,
+          "sha512": "5a633bf5227379663dbe4a89465e44ae725c8ce6045db14cf046fd9d11da7d89b1b8109449d9f4d3cacab213611acc0683b9b134aa67506e4feb729d762ca515",
+          "sha256": "3e4f0b24ab88cd294583159238b4a97120aa6e70d4541f1b89daaa3103b574ab",
+          "sha1": "7b5167ef9f6cbc74a113841cf9123141db9a44f8",
+          "md5": "69a90ee51c0b494717979c872dc9dfb0"
+        }
+      ]
+    }
+  ]
+}

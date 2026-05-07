@@ -1,0 +1,148 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "info.preva1l.trashcan",
+    "module": "paper",
+    "version": "1.2.3",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "8.14"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 21,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "dependencies": [
+        {
+          "group": "info.preva1l.trashcan",
+          "module": "common",
+          "version": {
+            "requires": "1.2.3"
+          }
+        },
+        {
+          "group": "info.preva1l.hooker",
+          "module": "Hooker",
+          "version": {
+            "requires": "1.0.2"
+          }
+        },
+        {
+          "group": "org.incendo",
+          "module": "cloud-paper",
+          "version": {
+            "requires": "2.0.0-beta.10"
+          }
+        },
+        {
+          "group": "org.incendo",
+          "module": "cloud-minecraft-extras",
+          "version": {
+            "requires": "2.0.0-beta.10"
+          }
+        },
+        {
+          "group": "org.reflections",
+          "module": "reflections",
+          "version": {
+            "requires": "0.10.2"
+          }
+        },
+        {
+          "group": "org.incendo",
+          "module": "cloud-annotations",
+          "version": {
+            "requires": "2.0.0"
+          }
+        },
+        {
+          "group": "de.exlll",
+          "module": "configlib-yaml",
+          "version": {
+            "requires": "4.6.1"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "paper-1.2.3.jar",
+          "url": "paper-1.2.3.jar",
+          "size": 81512,
+          "sha512": "0797d370efd03cd6898a9cfba06c2d8fbf90d6b86dea106289780c0333bc9dbe4589d406940d601bc95a106e13360ea0de6c9a3bfd43d43b98354b0094f676e8",
+          "sha256": "7dcf7d3c78cd6a8570ef66c05716139d4fd6dd204869a0c5802291e723f5fe44",
+          "sha1": "64148edc0b7e5656045c5137c33341d45cec5677",
+          "md5": "f6d7d213a46dde087480a0c7b1b50994"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 21,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "info.preva1l.trashcan",
+          "module": "common",
+          "version": {
+            "requires": "1.2.3"
+          }
+        },
+        {
+          "group": "info.preva1l.hooker",
+          "module": "Hooker",
+          "version": {
+            "requires": "1.0.2"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "paper-1.2.3.jar",
+          "url": "paper-1.2.3.jar",
+          "size": 81512,
+          "sha512": "0797d370efd03cd6898a9cfba06c2d8fbf90d6b86dea106289780c0333bc9dbe4589d406940d601bc95a106e13360ea0de6c9a3bfd43d43b98354b0094f676e8",
+          "sha256": "7dcf7d3c78cd6a8570ef66c05716139d4fd6dd204869a0c5802291e723f5fe44",
+          "sha1": "64148edc0b7e5656045c5137c33341d45cec5677",
+          "md5": "f6d7d213a46dde087480a0c7b1b50994"
+        }
+      ]
+    },
+    {
+      "name": "shadowRuntimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "shadowed",
+        "org.gradle.jvm.version": 21,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "paper-1.2.3.jar",
+          "url": "paper-1.2.3.jar",
+          "size": 81512,
+          "sha512": "0797d370efd03cd6898a9cfba06c2d8fbf90d6b86dea106289780c0333bc9dbe4589d406940d601bc95a106e13360ea0de6c9a3bfd43d43b98354b0094f676e8",
+          "sha256": "7dcf7d3c78cd6a8570ef66c05716139d4fd6dd204869a0c5802291e723f5fe44",
+          "sha1": "64148edc0b7e5656045c5137c33341d45cec5677",
+          "md5": "f6d7d213a46dde087480a0c7b1b50994"
+        }
+      ]
+    }
+  ]
+}

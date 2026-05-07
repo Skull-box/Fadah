@@ -1,0 +1,81 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "info.preva1l.trashcan",
+    "module": "paper-kotlin",
+    "version": "1.2.3",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "8.14"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 21,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "files": [
+        {
+          "name": "paper-kotlin-1.2.3.jar",
+          "url": "paper-kotlin-1.2.3.jar",
+          "size": 261,
+          "sha512": "49a31f327c770258df1f07cc919f16f5bac5fd281878884282d679c525b7c760156772dd02208e0fabe634b2fc7e42a974e4e84f996725b48d01eecf220b8ee5",
+          "sha256": "b7d847cd51058c6e2877f84f73e4afe1a6ac8816da6e3e11cbe9c1880c7bd2c0",
+          "sha1": "48822cc6b294433067ac34600e51dc9bdc59b819",
+          "md5": "2e040aacfa47937f32c49aaa33b79b63"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 21,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "paper-kotlin-1.2.3.jar",
+          "url": "paper-kotlin-1.2.3.jar",
+          "size": 261,
+          "sha512": "49a31f327c770258df1f07cc919f16f5bac5fd281878884282d679c525b7c760156772dd02208e0fabe634b2fc7e42a974e4e84f996725b48d01eecf220b8ee5",
+          "sha256": "b7d847cd51058c6e2877f84f73e4afe1a6ac8816da6e3e11cbe9c1880c7bd2c0",
+          "sha1": "48822cc6b294433067ac34600e51dc9bdc59b819",
+          "md5": "2e040aacfa47937f32c49aaa33b79b63"
+        }
+      ]
+    },
+    {
+      "name": "shadowRuntimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "shadowed",
+        "org.gradle.jvm.version": 21,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "paper-kotlin-1.2.3.jar",
+          "url": "paper-kotlin-1.2.3.jar",
+          "size": 261,
+          "sha512": "49a31f327c770258df1f07cc919f16f5bac5fd281878884282d679c525b7c760156772dd02208e0fabe634b2fc7e42a974e4e84f996725b48d01eecf220b8ee5",
+          "sha256": "b7d847cd51058c6e2877f84f73e4afe1a6ac8816da6e3e11cbe9c1880c7bd2c0",
+          "sha1": "48822cc6b294433067ac34600e51dc9bdc59b819",
+          "md5": "2e040aacfa47937f32c49aaa33b79b63"
+        }
+      ]
+    }
+  ]
+}

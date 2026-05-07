@@ -48,7 +48,8 @@ dependencies {
     dependency(libs.playerpoints(), "PlayerPoints") { load = RLO.BEFORE ; required = false }
 
     // Eco Items
-    compileOnly(libs.bundles.eco) { isTransitive = false }
+    compileOnly(libs.eco) { isTransitive = false }
+    compileOnly(files("../libs/libreforge-4.58.1.jar"))
     dependency(libs.eco.items(), "EcoItems") { load = RLO.BEFORE ; required = false }
 
     dependency(libs.zauctionhouse(), "zAuctionHouseV3") { required = false }

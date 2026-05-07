@@ -1,5 +1,3 @@
-import info.preva1l.fadah.BuildConstants
-import info.preva1l.trashcan.finallyADecent
 import info.preva1l.trashcan.paper
 import org.gradle.kotlin.dsl.support.uppercaseFirstChar
 
@@ -11,8 +9,12 @@ plugins {
 }
 
 repositories {
-    finallyADecent(dev = BuildConstants.DEV_MODE)
-    finallyADecent()
+    maven { url = uri("$rootDir/libs/maven-repo") }
+    mavenLocal()
+    mavenCentral()
+    maven(url = "https://repo.papermc.io/repository/maven-public/")
+    maven(url = "https://jitpack.io")
+    maven(url = "https://repo.codemc.io/repository/maven-snapshots/")
 }
 
 dependencies {

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>info.preva1l.trashcan</groupId>
+  <artifactId>info.preva1l.trashcan.gradle.plugin</artifactId>
+  <version>1.0.3</version>
+  <packaging>pom</packaging>
+  <name>Trashcan</name>
+  <description>Build tooling to help with the Trashcan library and other general tasks.</description>
+  <dependencies>
+    <dependency>
+      <groupId>info.preva1l.trashcan</groupId>
+      <artifactId>Trashcan-Tooling</artifactId>
+      <version>1.0.3</version>
+    </dependency>
+  </dependencies>
+</project>

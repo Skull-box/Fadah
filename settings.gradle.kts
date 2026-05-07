@@ -3,7 +3,8 @@ include("Bukkit", "API")
 
 pluginManagement {
     repositories {
+        maven { url = uri("$rootDir/libs/maven-repo") }
+        mavenLocal()
         gradlePluginPortal()
-        maven("https://repo.preva1l.info/releases/")
     }
 }

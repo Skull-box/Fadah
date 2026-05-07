@@ -2,9 +2,10 @@
 
 dependencyResolutionManagement {
     repositories {
+        maven { url = uri("$rootDir/../libs/maven-repo") }
+        mavenLocal()
         mavenCentral()
         gradlePluginPortal()
-        maven("https://repo.preva1l.info/releases/")
     }
 
     versionCatalogs {

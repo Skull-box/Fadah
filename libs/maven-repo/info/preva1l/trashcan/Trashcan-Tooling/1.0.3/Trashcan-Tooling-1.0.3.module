@@ -1,0 +1,153 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "info.preva1l.trashcan",
+    "module": "Trashcan-Tooling",
+    "version": "1.0.3",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "8.14"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.environment": "standard-jvm",
+        "org.gradle.jvm.version": 21,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api",
+        "org.jetbrains.kotlin.platform.type": "jvm"
+      },
+      "files": [
+        {
+          "name": "Trashcan-Tooling-1.0.3.jar",
+          "url": "Trashcan-Tooling-1.0.3.jar",
+          "size": 67462,
+          "sha512": "3f1c922c582c3adfae60c6145a9249d69aed4dc7274fda36752a17d3d402b7a56f1410bcd3ab40637a65896973bccf8e990b1167a5c8a8849314d9b72900b2c5",
+          "sha256": "79d2c144ca1060c2cc08a5bc154bacc85b4efd9c3f7b0ac602b02ed94d1adb3d",
+          "sha1": "3d89e74eba5b7ec52406b5eb083241d375211d89",
+          "md5": "2d2f3f90688a04137ffcb9ad3e693505"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.environment": "standard-jvm",
+        "org.gradle.jvm.version": 21,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime",
+        "org.jetbrains.kotlin.platform.type": "jvm"
+      },
+      "dependencies": [
+        {
+          "group": "org.ajoberstar.grgit",
+          "module": "grgit-core",
+          "version": {
+            "requires": "5.3.0"
+          }
+        },
+        {
+          "group": "com.google.code.gson",
+          "module": "gson",
+          "version": {
+            "requires": "2.13.1"
+          }
+        },
+        {
+          "group": "io.papermc.paperweight.userdev",
+          "module": "io.papermc.paperweight.userdev.gradle.plugin",
+          "version": {
+            "requires": "2.0.0-beta.17"
+          }
+        },
+        {
+          "group": "com.fasterxml.jackson.dataformat",
+          "module": "jackson-dataformat-yaml",
+          "version": {
+            "requires": "2.19.0"
+          },
+          "excludes": [
+            {
+              "group": "org.jetbrains.kotlin",
+              "module": "*"
+            }
+          ]
+        },
+        {
+          "group": "com.fasterxml.jackson.module",
+          "module": "jackson-module-kotlin",
+          "version": {
+            "requires": "2.19.0"
+          },
+          "excludes": [
+            {
+              "group": "org.jetbrains.kotlin",
+              "module": "*"
+            }
+          ]
+        }
+      ],
+      "files": [
+        {
+          "name": "Trashcan-Tooling-1.0.3.jar",
+          "url": "Trashcan-Tooling-1.0.3.jar",
+          "size": 67462,
+          "sha512": "3f1c922c582c3adfae60c6145a9249d69aed4dc7274fda36752a17d3d402b7a56f1410bcd3ab40637a65896973bccf8e990b1167a5c8a8849314d9b72900b2c5",
+          "sha256": "79d2c144ca1060c2cc08a5bc154bacc85b4efd9c3f7b0ac602b02ed94d1adb3d",
+          "sha1": "3d89e74eba5b7ec52406b5eb083241d375211d89",
+          "md5": "2d2f3f90688a04137ffcb9ad3e693505"
+        }
+      ]
+    },
+    {
+      "name": "javadocElements",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "javadoc",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "Trashcan-Tooling-1.0.3-javadoc.jar",
+          "url": "Trashcan-Tooling-1.0.3-javadoc.jar",
+          "size": 91976,
+          "sha512": "5de6bdfa86ca12a12395c93c05d52b0cadbe403cae964e00a1022a1e8bc7ab5d214629bb072de712bc432ac9d643c93660024ad7f1645c3956bc932f0fb07839",
+          "sha256": "5352cd0d3dff18f4a82f9ed59e74bb7ba73fd38491248bcbada750031853a551",
+          "sha1": "3133943905911bcc1fc61bfc65c74cc2751b57ee",
+          "md5": "2eca44a5998464dc7f4b981e800c35fb"
+        }
+      ]
+    },
+    {
+      "name": "sourcesElements",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "sources",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "Trashcan-Tooling-1.0.3-sources.jar",
+          "url": "Trashcan-Tooling-1.0.3-sources.jar",
+          "size": 11946,
+          "sha512": "aa9a8ef725567dfebc3fd718438e9e06e0711c444bf05985e0037b564b3f89f324366d03a1e243f2b1a474aae3b8ec8a72e4a7059fea5d40c0ab64c9f481c7a9",
+          "sha256": "83ee513dfe45262437a756a4b3e50681c59c68e0d667b635a4506d725553dce1",
+          "sha1": "94aae2272a399c359b8c1b44ebce6204399bc4e0",
+          "md5": "b86c264f83d90e69e693834d3031b2b5"
+        }
+      ]
+    }
+  ]
+}

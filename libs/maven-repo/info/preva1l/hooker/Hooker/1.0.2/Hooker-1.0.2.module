@@ -1,0 +1,80 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "info.preva1l.hooker",
+    "module": "Hooker",
+    "version": "1.0.2",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "8.8"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 21,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "files": [
+        {
+          "name": "Hooker-1.0.2.jar",
+          "url": "Hooker-1.0.2.jar",
+          "size": 17984,
+          "sha512": "42487189504ea36d45a5b5f9c73c87da4fd4a57f976e592f431a6cee605463d46678388c215ec57d76a1d6137bb5c66cbfec9433a69cb8a7ae7534cf4867fcb0",
+          "sha256": "e580444b20d5d1c0daaf36a6aef518749d67369bf3344f04fb2ec89b2882b4c1",
+          "sha1": "cec455014d550f912deb30baa92d113b024f0525",
+          "md5": "e1eee4362196b6371b230fdba1f90381"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 21,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "Hooker-1.0.2.jar",
+          "url": "Hooker-1.0.2.jar",
+          "size": 17984,
+          "sha512": "42487189504ea36d45a5b5f9c73c87da4fd4a57f976e592f431a6cee605463d46678388c215ec57d76a1d6137bb5c66cbfec9433a69cb8a7ae7534cf4867fcb0",
+          "sha256": "e580444b20d5d1c0daaf36a6aef518749d67369bf3344f04fb2ec89b2882b4c1",
+          "sha1": "cec455014d550f912deb30baa92d113b024f0525",
+          "md5": "e1eee4362196b6371b230fdba1f90381"
+        }
+      ]
+    },
+    {
+      "name": "shadowRuntimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "shadowed",
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "Hooker-1.0.2.jar",
+          "url": "Hooker-1.0.2.jar",
+          "size": 17984,
+          "sha512": "42487189504ea36d45a5b5f9c73c87da4fd4a57f976e592f431a6cee605463d46678388c215ec57d76a1d6137bb5c66cbfec9433a69cb8a7ae7534cf4867fcb0",
+          "sha256": "e580444b20d5d1c0daaf36a6aef518749d67369bf3344f04fb2ec89b2882b4c1",
+          "sha1": "cec455014d550f912deb30baa92d113b024f0525",
+          "md5": "e1eee4362196b6371b230fdba1f90381"
+        }
+      ]
+    }
+  ]
+}
