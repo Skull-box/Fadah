@@ -30,10 +30,7 @@ public final class ExpiredListingsAwareDataProvider implements AwareCollectableD
     private void checkDatabase(ExpiredItems box, CollectableItem item, Runnable action) {
         DataService.instance.get(ExpiredItems.class, box.owner())
                 .thenAcceptAsync(it -> it.ifPresent(b -> {
-                    if (!b.contains(item)) {
-                        box.remove(item);
-                        return;
-                    }
+                    if (!b.contains(item)) return;
                     action.run();
                 }), executor);
     }

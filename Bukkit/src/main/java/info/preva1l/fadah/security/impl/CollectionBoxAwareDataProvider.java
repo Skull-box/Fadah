@@ -30,10 +30,7 @@ public final class CollectionBoxAwareDataProvider implements AwareCollectableDat
     private void checkDatabase(CollectionBox box, CollectableItem item, Runnable action) {
         DataService.instance.get(CollectionBox.class, box.owner())
                 .thenAcceptAsync(it -> it.ifPresent(b -> {
-                    if (!b.contains(item)) {
-                        box.remove(item);
-                        return;
-                    }
+                    if (!b.contains(item)) return;
                     action.run();
                 }), executor);
     }

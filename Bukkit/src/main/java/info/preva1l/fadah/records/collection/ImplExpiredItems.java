@@ -47,8 +47,8 @@ public final class ImplExpiredItems implements ExpiredItems {
 
     @Override
     public void add(CollectableItem collectableItem) {
-        save();
         collectableItems.add(collectableItem);
+        save();
     }
 
     @Override
