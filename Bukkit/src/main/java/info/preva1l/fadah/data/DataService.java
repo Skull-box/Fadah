@@ -27,10 +27,12 @@ import lombok.Getter;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -48,6 +50,8 @@ public final class DataService {
     @Getter private final ExecutorService threadPool;
     private final Map<DatabaseType, Class<? extends DatabaseHandler>> databaseHandlers = new HashMap<>();
     private DatabaseHandler handler;
+    private final Map<UUID, FailureRecord> expiryFailures = new ConcurrentHashMap<>();
+    private static final long FAILURE_LOG_INTERVAL_MS = 60_000L;
 
     private DataService() {
         threadPool = Executors.newVirtualThreadPerTaskExecutor();
@@ -62,10 +66,10 @@ public final class DataService {
         handler = initHandler();
         handler.connect();
 
+        Broker.getInstance().load();
+
         getAll(Listing.class).thenAccept(listings ->
                 listings.forEach(listing -> CacheAccess.add(Listing.class, listing))).join();
-
-        Broker.getInstance().load();
 
         Tasks.getLoopDeLoop().scheduleAtFixedRate(
                 listingExpiryTask(),
@@ -204,15 +208,49 @@ public final class DataService {
 
     private Runnable listingExpiryTask() {
         return () -> {
-            for (Listing listing : CacheAccess.getAll(Listing.class)) {
-                if (System.currentTimeMillis() <= listing.getDeletionDate()) continue;
+            try {
+                List<Listing> snapshot = CacheAccess.getAll(Listing.class);
+                Set<UUID> currentIds = new HashSet<>();
+                for (Listing l : snapshot) currentIds.add(l.getId());
+                expiryFailures.keySet().retainAll(currentIds);
 
-                if (listing instanceof BidListing bidListing) {
-                    bidListing.completeBidding();
-                } else {
-                    listing.expire();
+                for (Listing listing : snapshot) {
+                    if (System.currentTimeMillis() <= listing.getDeletionDate()) continue;
+
+                    try {
+                        if (listing instanceof BidListing bidListing) {
+                            bidListing.completeBidding();
+                        } else {
+                            listing.expire();
+                        }
+                    } catch (Throwable t) {
+                        recordExpiryFailure(listing.getId(), t);
+                    }
                 }
+            } catch (Throwable t) {
+                logger.log(Level.SEVERE, "Listing expiry task iteration failed", t);
             }
         };
+    }
+
+    private void recordExpiryFailure(UUID id, Throwable t) {
+        long now = System.currentTimeMillis();
+        expiryFailures.compute(id, (key, prev) -> {
+            if (prev == null) {
+                logger.log(Level.WARNING, "Failed to process listing expiry for " + key, t);
+                return new FailureRecord(now, now, 1);
+            }
+            int attempts = prev.attempts() + 1;
+            if (now - prev.lastLogMs() >= FAILURE_LOG_INTERVAL_MS) {
+                long elapsedSec = (now - prev.firstFailureMs()) / 1000L;
+                logger.log(Level.WARNING, "Listing expiry still failing for " + key
+                        + " (attempt #" + attempts + ", first failed " + elapsedSec + "s ago)", t);
+                return new FailureRecord(prev.firstFailureMs(), now, attempts);
+            }
+            return new FailureRecord(prev.firstFailureMs(), prev.lastLogMs(), attempts);
+        });
+    }
+
+    private record FailureRecord(long firstFailureMs, long lastLogMs, int attempts) {
     }
 }
