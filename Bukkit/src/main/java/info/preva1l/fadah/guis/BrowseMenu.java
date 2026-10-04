@@ -152,11 +152,24 @@ public abstract class BrowseMenu extends ScrollBarFastInv {
         }
 
         if (event.isRightClick() && isShulkerBox) {
+            processingListings.remove(listing);
             new ShulkerBoxPreviewMenu(listing, () -> open(player)).open(player);
             return;
         }
 
-        if (!listing.canBuy(player)) return;
+        // Bedrock : pas de Shift+clic, le vendeur retire son annonce par simple clic
+        if (listing.isOwner(clicker) && listing.isActive()) {
+            listing.cancel(clicker).thenRun(() -> {
+                updatePagination();
+                processingListings.remove(listing);
+            });
+            return;
+        }
+
+        if (!listing.canBuy(player)) {
+            processingListings.remove(listing);
+            return;
+        }
 
         if (isBidListing) {
             new PlaceBidMenu((BidListing) listing, player, () -> open(player)).open(player);
