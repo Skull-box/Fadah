@@ -1,0 +1,154 @@
+name: CI
+
+# Build (tests compris) à chaque push et PR.
+#  - branche par défaut (master) : release stable semantic-release (tag v<version>, Release avec le jar
+#    Fadah-Bukkit-<version>.jar, celui du plugin déployé). La version calculée est injectée dans le build du
+#    runner (-Pversion, build.sh) : jamais de commit de retour. Les commits ci:/build:/docs:/chore: ne
+#    déclenchent aucune release. Tant qu'aucun tag v* n'existe, la première Release est créée d'après la
+#    version du build, 3.2.2 (initial-release.sh).
+#    Chaque push sur master republie aussi le SNAPSHOT mobile fr.skullbox:fadah-bukkit:3.2.2-SNAPSHOT (jar
+#    shadé Fadah-Bukkit, pom sans dépendances) sur GitHub Packages, avec élagage (publish-snapshot.sh).
+#  - toute autre branche : prérelease glissante « build-<branche> » (titre = nom de la branche), écrasée
+#    à chaque push ; supprimée avec la branche (événement delete : il ne se déclenche que depuis le
+#    workflow de la branche par défaut, donc ce fichier doit exister sur master).
+#  - PR : build seul, rien n'est publié.
+# Pas de déploiement automatique sur les serveurs.
+
+on:
+  push:
+    branches: ['**']   # pas les tags (semantic-release et les builds glissants en poussent)
+  pull_request:
+  delete:
+
+permissions:
+  contents: write   # tag + Release
+  packages: write   # SNAPSHOT fadah-bukkit, et suppression du paquet à élaguer
+
+# Une exécution par ref. Un événement delete partage le groupe de la branche supprimée : il annule un
+# build en cours de cette branche. On n'annule jamais une exécution de la branche par défaut (release).
+concurrency:
+  group: ci-${{ github.event_name == 'delete' && format('refs/heads/{0}', github.event.ref) || github.ref }}
+  cancel-in-progress: ${{ github.event_name != 'push' || github.ref != format('refs/heads/{0}', github.event.repository.default_branch) }}
+
+jobs:
+  build:
+    if: github.event_name != 'delete'
+    runs-on: blacksmith-2vcpu-ubuntu-2404
+    env:
+      # Fadah ne lit aucun paquet privé : pas de PACKAGES_READ_TOKEN.
+      IS_RELEASE_BRANCH: ${{ github.event_name == 'push' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch) }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # semantic-release lit l'historique et les tags
+
+      # Gradle n'utilise pas settings.xml : pas de server-id, les identifiants de publication passent par
+      # l'environnement (MAVEN_USERNAME / MAVEN_TOKEN).
+      - name: JDK 21 (Temurin) + cache Gradle
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: gradle
+
+      - name: Node 22 (semantic-release)
+        if: env.IS_RELEASE_BRANCH == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Version hors release (branche assainie + sha court)
+        id: ver
+        env:
+          HEAD_REF: ${{ github.head_ref }}
+          REF_NAME: ${{ github.ref_name }}
+          SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          branch="${HEAD_REF:-$REF_NAME}"
+          slug=$(bash .github/scripts/slug.sh "$branch")
+          if [ -n "$PR_NUMBER" ]; then slug="pr-$PR_NUMBER"; fi
+          {
+            echo "branch=$branch"
+            echo "sha=$SHA"
+            echo "version=$slug-${SHA:0:7}"
+          } >> "$GITHUB_OUTPUT"
+
+      # Aucun tag v* : première Release d'après la version du build (v3.2.2 pour la version 3.2.2 de gradle.properties). Sinon no-op.
+      - name: Release initiale (aucun tag v*)
+        id: initial
+        if: env.IS_RELEASE_BRANCH == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SHA: ${{ github.sha }}
+        run: |
+          bash .github/scripts/initial-release.sh "$SHA"
+          if [ -f .release-version ]; then
+            echo "released=true" >> "$GITHUB_OUTPUT"
+            echo "Release initiale v$(cat .release-version) publiée"
+          fi
+
+      # semantic-release calcule la version ; son prepareCmd lance le build avec cette version (un build
+      # rouge empêche donc la release). Sans release due, rien n'est construit ici : l'étape Build s'en charge.
+      - name: semantic-release (master)
+        id: semrel
+        if: env.IS_RELEASE_BRANCH == 'true' && steps.initial.outputs.released != 'true'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          npm install --no-save --no-package-lock --no-audit --no-fund \
+            semantic-release@25.0.9 \
+            @semantic-release/commit-analyzer@13.0.1 \
+            @semantic-release/release-notes-generator@14.1.1 \
+            @semantic-release/exec@7.1.0 \
+            @semantic-release/github@12.0.10
+          npx semantic-release
+          if [ -f .release-version ]; then
+            echo "released=true" >> "$GITHUB_OUTPUT"
+            echo "Release $(cat .release-version) publiée"
+          else
+            echo "released=false" >> "$GITHUB_OUTPUT"
+            echo "Aucune release due pour ces commits"
+          fi
+
+      - name: Build (gradlew clean build, tests compris)
+        if: steps.initial.outputs.released != 'true' && steps.semrel.outputs.released != 'true'
+        run: bash .github/scripts/build.sh "$VERSION"
+        env:
+          VERSION: ${{ steps.ver.outputs.version }}
+
+      # Le build de release a injecté une version par -Pversion : le script publie, lui, <version committée>-SNAPSHOT.
+      # SNAPSHOT_MAX = floor(20 Mo / taille d'une publication, ~0,63 Mo), plafonné à 10.
+      - name: Publier le SNAPSHOT mobile (jar shadé Fadah-Bukkit) et élaguer
+        if: env.IS_RELEASE_BRANCH == 'true'
+        run: bash .github/scripts/publish-snapshot.sh
+        env:
+          SNAPSHOT_MAX: '10'
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MAVEN_USERNAME: ${{ github.actor }}
+          MAVEN_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Prérelease glissante de la branche
+        if: github.event_name == 'push' && env.IS_RELEASE_BRANCH != 'true'
+        run: bash .github/scripts/rolling-release.sh "$BRANCH" "$SHA" "$VERSION"
+        env:
+          # Passés par l'environnement, jamais interpolés dans le script : un nom de branche est une entrée libre.
+          BRANCH: ${{ steps.ver.outputs.branch }}
+          SHA: ${{ steps.ver.outputs.sha }}
+          VERSION: ${{ steps.ver.outputs.version }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  cleanup:
+    # Branche supprimée : la prérelease glissante et son tag disparaissent.
+    if: github.event_name == 'delete' && github.event.ref_type == 'branch'
+    runs-on: blacksmith-2vcpu-ubuntu-2404
+    steps:
+      - name: Checkout (branche par défaut, pour les scripts)
+        uses: actions/checkout@v4
+
+      - name: Supprimer la release et le tag de la branche
+        run: bash .github/scripts/cleanup-release.sh "$BRANCH"
+        env:
+          BRANCH: ${{ github.event.ref }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
