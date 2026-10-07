@@ -23,6 +23,8 @@ repositories {
     maven(url = "https://mvn-repo.arim.space/lesser-gpl3/")
     maven(url = "https://repo.rosewooddev.io/repository/public/")
     maven(url = "https://nexus.neetgames.com/repository/maven-releases/")
+    // multilib (com.github.puregero) et ses sous-modules : JitPack répond 401 (dépôt renommé), Clojars les sert.
+    maven(url = "https://repo.clojars.org/")
 }
 
 dependencies {
@@ -120,3 +122,36 @@ paper {
 
 operator fun Provider<MinimalExternalModuleDependency>.invoke(): String =
     get().let { "${it.module.group}:${it.module.name}:${it.version}" }
+
+// SNAPSHOT mobile fr.skullbox:fadah-bukkit:<version>-SNAPSHOT sur les GitHub Packages de CE dépôt
+// (publish-snapshot.sh, à chaque push sur master). artifactId en minuscules : GitHub refuse les majuscules
+// (HTTP 422). On publie le jar shadé (celui des serveurs : Fadah-Bukkit-<version>.jar), sans « from(components) » :
+// le pom publié n'a ainsi aucune dépendance, donc rien de transitif chez les consommateurs. groupId fr.skullbox et
+// non project.group (info.preva1l.fadah) : ce dernier sert à nommer la classe principale du plugin.
+// Seule cette publication est envoyée par la CI (tâche nommée) : « publish » enverrait aussi l'API et
+// la publication « mavenJava » de l'amont vers le dépôt Maven de l'amont.
+publishing {
+    publications {
+        register<MavenPublication>("skullbox") {
+            groupId = "fr.skullbox"
+            artifactId = "fadah-bukkit"
+            artifact(tasks.named<ShadowJar>("shadowJar")) {
+                classifier = null
+            }
+            pom {
+                name = "Fadah-Bukkit"
+                description = "Fadah, hôtel des ventes du réseau Skullbox (jar shadé, sans dépendances transitives)"
+            }
+        }
+    }
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/Skull-box/Fadah")
+            credentials {
+                username = System.getenv("MAVEN_USERNAME")
+                password = System.getenv("MAVEN_TOKEN")
+            }
+        }
+    }
+}

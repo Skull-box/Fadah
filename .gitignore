@@ -119,3 +119,7 @@ run/
 
 # libs
 !libs/**
+# Jars construits (Fadah-Bukkit-<version>.jar) et état de semantic-release / CI
+target/
+.release-version
+node_modules/
