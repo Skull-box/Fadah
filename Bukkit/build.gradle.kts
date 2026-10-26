@@ -123,9 +123,9 @@ paper {
 operator fun Provider<MinimalExternalModuleDependency>.invoke(): String =
     get().let { "${it.module.group}:${it.module.name}:${it.version}" }
 
-// SNAPSHOT mobile fr.skullbox:fadah-bukkit:<version>-SNAPSHOT sur les GitHub Packages de CE dépôt
-// (publish-snapshot.sh, à chaque push sur master). artifactId en minuscules : GitHub refuse les majuscules
-// (HTTP 422). On publie le jar shadé (celui des serveurs : Fadah-Bukkit-<version>.jar), sans « from(components) » :
+// SNAPSHOT mobile fr.skullbox:fadah-bukkit:<version>-SNAPSHOT sur Reposilite (publish-snapshot.sh, à chaque
+// push sur master). artifactId en minuscules, hérité de GitHub Packages (qui refusait les majuscules). On publie
+// le jar shadé (celui des serveurs : Fadah-Bukkit-<version>.jar), sans « from(components) » :
 // le pom publié n'a ainsi aucune dépendance, donc rien de transitif chez les consommateurs. groupId fr.skullbox et
 // non project.group (info.preva1l.fadah) : ce dernier sert à nommer la classe principale du plugin.
 // Seule cette publication est envoyée par la CI (tâche nommée) : « publish » enverrait aussi l'API et
@@ -146,8 +146,8 @@ publishing {
     }
     repositories {
         maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/Skull-box/Fadah")
+            name = "Reposilite"
+            url = uri("https://maven.skullbox.fr/snapshots")
             credentials {
                 username = System.getenv("MAVEN_USERNAME")
                 password = System.getenv("MAVEN_TOKEN")

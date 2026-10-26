@@ -7,7 +7,8 @@ name: CI
 #    déclenchent aucune release. Tant qu'aucun tag v* n'existe, la première Release est créée d'après la
 #    version du build, 3.2.2 (initial-release.sh).
 #    Chaque push sur master republie aussi le SNAPSHOT mobile fr.skullbox:fadah-bukkit:3.2.2-SNAPSHOT (jar
-#    shadé Fadah-Bukkit, pom sans dépendances) sur GitHub Packages, avec élagage (publish-snapshot.sh).
+#    shadé Fadah-Bukkit, pom sans dépendances) sur Reposilite (https://maven.skullbox.fr/snapshots,
+#    publish-snapshot.sh).
 #  - toute autre branche : prérelease glissante « build-<branche> » (titre = nom de la branche), écrasée
 #    à chaque push ; supprimée avec la branche (événement delete : il ne se déclenche que depuis le
 #    workflow de la branche par défaut, donc ce fichier doit exister sur master).
@@ -22,7 +23,6 @@ on:
 
 permissions:
   contents: write   # tag + Release
-  packages: write   # SNAPSHOT fadah-bukkit, et suppression du paquet à élaguer
 
 # Une exécution par ref. Un événement delete partage le groupe de la branche supprimée : il annule un
 # build en cours de cette branche. On n'annule jamais une exécution de la branche par défaut (release).
@@ -35,7 +35,11 @@ jobs:
     if: github.event_name != 'delete'
     runs-on: blacksmith-2vcpu-ubuntu-2404
     env:
-      # Fadah ne lit aucun paquet privé : pas de PACKAGES_READ_TOKEN.
+      # Reposilite (maven.skullbox.fr), secrets de dépôt : jeton de LECTURE pour tout le job. L'étape de publication
+      # le remplace par le jeton d'écriture.
+      MAVEN_USERNAME: ${{ secrets.MAVEN_READ_USER }}
+      MAVEN_TOKEN: ${{ secrets.MAVEN_READ_TOKEN }}
+      # Fadah ne lit aucun paquet privé : le jeton de lecture ne sert pas au build.
       IS_RELEASE_BRANCH: ${{ github.event_name == 'push' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch) }}
     steps:
       - name: Checkout
@@ -119,15 +123,12 @@ jobs:
           VERSION: ${{ steps.ver.outputs.version }}
 
       # Le build de release a injecté une version par -Pversion : le script publie, lui, <version committée>-SNAPSHOT.
-      # SNAPSHOT_MAX = floor(20 Mo / taille d'une publication, ~0,63 Mo), plafonné à 10.
-      - name: Publier le SNAPSHOT mobile (jar shadé Fadah-Bukkit) et élaguer
+      - name: Publier le SNAPSHOT mobile (jar shadé Fadah-Bukkit)
         if: env.IS_RELEASE_BRANCH == 'true'
         run: bash .github/scripts/publish-snapshot.sh
         env:
-          SNAPSHOT_MAX: '10'
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          MAVEN_USERNAME: ${{ github.actor }}
-          MAVEN_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MAVEN_USERNAME: ${{ secrets.MAVEN_WRITE_USER }}
+          MAVEN_TOKEN: ${{ secrets.MAVEN_WRITE_TOKEN }}
 
       - name: Prérelease glissante de la branche
         if: github.event_name == 'push' && env.IS_RELEASE_BRANCH != 'true'

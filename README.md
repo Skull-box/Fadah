@@ -90,7 +90,6 @@ Ils remplacent les workflows de l'amont (`test.yml`, `publish.yml`).
   créée d'après la version de `gradle.properties`. Les commits de l'amont ne suivent pas forcément les conventional
   commits : peu de versions sortent seules après une synchronisation.
 - **Push sur `master`, aussi** : le jar du plugin est publié en SNAPSHOT mobile `fr.skullbox:fadah-bukkit:3.2.2-SNAPSHOT`
-  sur `https://maven.pkg.github.com/Skull-box/Fadah` (pom sans dépendances transitives). Élagage : au 10e dépôt du
-  SNAPSHOT le paquet est supprimé puis republié (~0,63 Mo par publication, 6,3 Mo au plus).
+  sur `https://maven.skullbox.fr/snapshots` (pom sans dépendances transitives). Reposilite ne garde que le dernier build.
 - **Toute autre branche** : prérelease GitHub glissante `build-<branche>` (titre = nom de la branche), écrasée à
   chaque push, supprimée avec la branche.
