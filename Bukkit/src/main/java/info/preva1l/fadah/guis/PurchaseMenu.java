@@ -3,6 +3,7 @@ package info.preva1l.fadah.guis;
 import info.preva1l.fadah.config.Config;
 import info.preva1l.fadah.config.misc.Tuple;
 import info.preva1l.fadah.records.listing.Listing;
+import info.preva1l.fadah.utils.Sons;
 import info.preva1l.fadah.utils.guis.FastInv;
 import info.preva1l.fadah.utils.guis.ItemBuilder;
 import info.preva1l.fadah.utils.guis.LayoutService;
@@ -35,9 +36,7 @@ public abstract class PurchaseMenu extends FastInv {
                 new ItemBuilder(getLang().getAsMaterial("cancel.icon", Material.RED_CONCRETE))
                         .name(getLang().getStringFormatted("cancel.name", "&c&lCANCEL"))
                         .modelData(getLang().getInt("cancel.model-data"))
-                        .lore(getLang().getLore("cancel.lore")).build(), e -> {
-                    returnFunction.run();
-                });
+                        .lore(getLang().getLore("cancel.lore")).build(), withSound(Sons.UI_CANCEL, e -> returnFunction.run()));
 
         setItem(getLayout().buttonSlots().getOrDefault(LayoutService.ButtonType.ITEM_TO_PURCHASE, -1),
                 listing.getItemStack().clone());

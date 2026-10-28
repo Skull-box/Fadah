@@ -14,6 +14,7 @@ import info.preva1l.fadah.hooks.impl.permissions.PermissionsHook;
 import info.preva1l.fadah.records.listing.ImplListingBuilder;
 import info.preva1l.fadah.records.listing.Listing;
 import info.preva1l.fadah.records.post.PostResult;
+import info.preva1l.fadah.utils.Sons;
 import info.preva1l.fadah.utils.TimeUtil;
 import info.preva1l.fadah.utils.guis.FastInv;
 import info.preva1l.fadah.utils.guis.ItemBuilder;
@@ -86,6 +87,7 @@ public class NewListingMenu extends FastInv {
                 .buildAndSubmit()
                 .failure(result -> {
                     giveItemBack = true;
+                    Sons.UI_ERROR.play(player);
                     if (result == PostResult.RESTRICTED_ITEM) {
                         Lang.sendMessage(player, Lang.i().getPrefix() + Lang.i().getErrors().getRestricted());
                     } else if (result == PostResult.MAX_LISTINGS) {
@@ -99,7 +101,10 @@ public class NewListingMenu extends FastInv {
 
                     player.closeInventory();
                 })
-                .success(result -> player.closeInventory());
+                .success(result -> {
+                    player.closeInventory();
+                    Sons.UI_CONFIRM.play(player);
+                });
     }
 
     @Override
@@ -128,12 +133,14 @@ public class NewListingMenu extends FastInv {
                             if (timeOffsetMillis - 30 * 60 * 1000 < 0)
                                 return;
                             timeOffsetMillis -= 30 * 60 * 1000;
+                            Sons.UI_CLICK.play(player);
                             setClock();
                             return;
                         }
                         if (timeOffsetMillis - 60 * 60 * 1000 < 0)
                             return;
                         timeOffsetMillis -= 60 * 60 * 1000;
+                        Sons.UI_CLICK.play(player);
                         setClock();
                     }
 
@@ -142,12 +149,14 @@ public class NewListingMenu extends FastInv {
                             if (timeOffsetMillis + 30 * 60 * 1000 > Config.i().getMaxListingLength().toMillis())
                                 return;
                             timeOffsetMillis += 30 * 60 * 1000;
+                            Sons.UI_CLICK.play(player);
                             setClock();
                             return;
                         }
                         if (timeOffsetMillis + 60 * 60 * 1000 > Config.i().getMaxListingLength().toMillis())
                             return;
                         timeOffsetMillis += 60 * 60 * 1000;
+                        Sons.UI_CLICK.play(player);
                         setClock();
                     }
                 });
@@ -175,6 +184,7 @@ public class NewListingMenu extends FastInv {
                                 Tuple.of("%first%", postAdvert),
                                 Tuple.of("%second%", dontPost))).build(), e -> {
                     this.advertise = !advertise;
+                    Sons.UI_TOGGLE.play(player);
                     setAdvertButton();
                 }
         );
@@ -202,10 +212,12 @@ public class NewListingMenu extends FastInv {
                                 Tuple.of("%next%", next))).build(), e -> {
                     if (e.getClick().isLeftClick() && previousCurrency != null) {
                         currency = previousCurrency;
+                        Sons.UI_CLICK.play(player);
                     }
 
                     if (e.getClick().isRightClick() && nextCurrency != null) {
                         currency = nextCurrency;
+                        Sons.UI_CLICK.play(player);
                     }
 
                     setCurrencyButton();
@@ -231,6 +243,7 @@ public class NewListingMenu extends FastInv {
                                 Tuple.of("%first%", bidding),
                                 Tuple.of("%second%", bin))).build(), e -> {
                     this.isBidding = !isBidding;
+                    Sons.UI_CLICK.play(player);
                     setModeButton();
                 }
         );
@@ -238,6 +251,6 @@ public class NewListingMenu extends FastInv {
 
     private void addNavigationButtons() {
         setItem(getLayout().buttonSlots().getOrDefault(LayoutService.ButtonType.CLOSE, 49),
-                Menus.i().getCloseButton().itemStack(), e -> e.getWhoClicked().closeInventory());
+                Menus.i().getCloseButton().itemStack(), withSound(Sons.UI_CLOSE, e -> e.getWhoClicked().closeInventory()));
     }
 }

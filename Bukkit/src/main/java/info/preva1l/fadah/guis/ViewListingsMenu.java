@@ -5,6 +5,7 @@ import info.preva1l.fadah.config.Menus;
 import info.preva1l.fadah.filters.SortingDirection;
 import info.preva1l.fadah.filters.SortingMethod;
 import info.preva1l.fadah.records.listing.Listing;
+import info.preva1l.fadah.utils.Sons;
 import info.preva1l.fadah.utils.guis.LayoutService;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -38,7 +39,7 @@ public class ViewListingsMenu extends BrowseMenu {
 
     protected void addNavigationButtons() {
         setItem(getLayout().buttonSlots().getOrDefault(LayoutService.ButtonType.BACK, -1),
-                Menus.i().getBackButton().itemStack(), e -> new ProfileMenu(player, owner).open(player));
+                Menus.i().getBackButton().itemStack(), withSound(Sons.UI_CLOSE, e -> new ProfileMenu(player, owner).open(player)));
     }
 
     @Override

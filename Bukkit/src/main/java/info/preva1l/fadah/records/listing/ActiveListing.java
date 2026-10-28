@@ -12,6 +12,7 @@ import info.preva1l.fadah.multiserver.Message;
 import info.preva1l.fadah.multiserver.Payload;
 import info.preva1l.fadah.records.collection.*;
 import info.preva1l.fadah.security.AwareDataService;
+import info.preva1l.fadah.utils.Sons;
 import info.preva1l.fadah.utils.Tasks;
 import info.preva1l.fadah.utils.logging.TransactionLogger;
 import net.kyori.adventure.text.Component;
@@ -245,16 +246,19 @@ public abstract class ActiveListing extends BaseListing {
     public boolean canBuy(@NotNull Player player) {
         try {
             if (isOwner(player)) {
+                Sons.UI_ERROR.play(player);
                 Lang.sendMessage(player, Lang.i().getPrefix() + Lang.i().getErrors().getOwnListings());
                 return false;
             }
 
             if (CacheAccess.get(Listing.class, getId()).isEmpty()) {
+                Sons.UI_ERROR.play(player);
                 Lang.sendMessage(player, Lang.i().getPrefix() + Lang.i().getErrors().getDoesNotExist());
                 return false;
             }
 
             if (System.currentTimeMillis() >= getDeletionDate() || ended.get()) {
+                Sons.UI_ERROR.play(player);
                 Lang.sendMessage(player, Lang.i().getPrefix() + Lang.i().getErrors().getDoesNotExist());
                 return false;
             }

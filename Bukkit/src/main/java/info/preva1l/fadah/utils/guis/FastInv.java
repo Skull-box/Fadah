@@ -2,6 +2,7 @@ package info.preva1l.fadah.utils.guis;
 
 import info.preva1l.fadah.Fadah;
 import info.preva1l.fadah.config.Menus;
+import info.preva1l.fadah.utils.Sons;
 import info.preva1l.fadah.utils.Tasks;
 import info.preva1l.fadah.utils.config.LanguageConfig;
 import net.kyori.adventure.text.Component;
@@ -69,6 +70,26 @@ public class FastInv implements InventoryHolder {
     }
 
     protected void onOpen(InventoryOpenEvent event) {
+    }
+
+    /**
+     * Son joué à l'ouverture du menu ({@code null} pour aucun). {@link Sons#UI_OPEN} par défaut ; un menu-journal
+     * ou un stockage redéfinit.
+     */
+    protected Sons openSound() {
+        return Sons.UI_OPEN;
+    }
+
+    /**
+     * Enveloppe un gestionnaire de clic pour jouer d'abord un son au joueur qui clique.
+     */
+    protected static Consumer<InventoryClickEvent> withSound(Sons sound, Consumer<InventoryClickEvent> handler) {
+        return e -> {
+            if (e.getWhoClicked() instanceof Player p) {
+                sound.play(p);
+            }
+            handler.accept(e);
+        };
     }
 
     protected void onClick(InventoryClickEvent event) {
@@ -206,6 +227,11 @@ public class FastInv implements InventoryHolder {
     }
 
     void handleOpen(InventoryOpenEvent e) {
+        Sons openSound = openSound();
+        if (openSound != null && e.getPlayer() instanceof Player p) {
+            openSound.play(p);
+        }
+
         onOpen(e);
 
         this.openHandlers.forEach(c -> c.accept(e));

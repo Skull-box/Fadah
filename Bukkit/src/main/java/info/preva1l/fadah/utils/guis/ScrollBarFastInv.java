@@ -2,6 +2,7 @@ package info.preva1l.fadah.utils.guis;
 
 import info.preva1l.fadah.config.Categories;
 import info.preva1l.fadah.config.Menus;
+import info.preva1l.fadah.utils.Sons;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -68,6 +69,7 @@ public abstract class ScrollBarFastInv extends PaginatedFastInv {
 
     protected synchronized void scrollDown() {
         if (scrollbarSlots.containsKey(Categories.getCategories().size() - 1)) return;
+        Sons.UI_CLICK.play(player);
         Map<Integer, Integer> newMappings = new HashMap<>();
         for (Map.Entry<Integer, Integer> entry : scrollbarSlots.entrySet()) {
             newMappings.put(entry.getKey() + 1, entry.getValue());
@@ -79,6 +81,7 @@ public abstract class ScrollBarFastInv extends PaginatedFastInv {
 
     protected synchronized void scrollUp() {
         if (scrollbarSlots.containsKey(0)) return;
+        Sons.UI_CLICK.play(player);
         Map<Integer, Integer> newMappings = new HashMap<>();
         for (Map.Entry<Integer, Integer> entry : scrollbarSlots.entrySet()) {
             newMappings.put(entry.getKey() - 1, entry.getValue());

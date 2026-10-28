@@ -9,6 +9,7 @@ import info.preva1l.fadah.records.collection.ExpiredItems;
 import info.preva1l.fadah.records.listing.Listing;
 import info.preva1l.fadah.utils.Text;
 import info.preva1l.fadah.utils.guis.FastInv;
+import info.preva1l.fadah.utils.Sons;
 import info.preva1l.fadah.utils.guis.ItemBuilder;
 import info.preva1l.fadah.utils.guis.LayoutService;
 import org.bukkit.Material;
@@ -35,7 +36,7 @@ public class ProfileMenu extends FastInv {
         fillers();
         setItem(getLayout().buttonSlots().getOrDefault(LayoutService.ButtonType.BACK, -1),
                 Menus.i().getBackButton().itemStack(),
-                e -> new MainMenu(null, viewer, null, null, null).open(viewer));
+                withSound(Sons.UI_CLOSE, e -> new MainMenu(null, viewer, null, null, null).open(viewer)));
 
         setItem(getLayout().buttonSlots().getOrDefault(LayoutService.ButtonType.PROFILE_SUMMARY, -1),
                 new ItemBuilder(getLang().getAsMaterial("profile-button.icon")).skullOwner(owner)
@@ -84,6 +85,8 @@ public class ProfileMenu extends FastInv {
                                 null,
                                 null
                         ).open(viewer);
+                    } else {
+                        Sons.UI_ERROR.play(viewer);
                     }
                 });
     }
@@ -109,6 +112,8 @@ public class ProfileMenu extends FastInv {
                     if ((viewer.getUniqueId() != owner.getUniqueId() && viewer.hasPermission("fadah.manage.collection-box"))
                             || viewer.getUniqueId() == owner.getUniqueId()) {
                         new CollectionMenu(viewer, owner, LayoutService.MenuType.COLLECTION_BOX).open(viewer);
+                    } else {
+                        Sons.UI_ERROR.play(viewer);
                     }
                 });
     }
@@ -134,6 +139,8 @@ public class ProfileMenu extends FastInv {
                     if ((viewer.getUniqueId() != owner.getUniqueId() && viewer.hasPermission("fadah.manage.expired-listings"))
                             || viewer.getUniqueId() == owner.getUniqueId()) {
                         new CollectionMenu(viewer, owner, LayoutService.MenuType.EXPIRED_LISTINGS).open(viewer);
+                    } else {
+                        Sons.UI_ERROR.play(viewer);
                     }
                 });
     }
@@ -157,6 +164,8 @@ public class ProfileMenu extends FastInv {
                     if ((viewer.getUniqueId() != owner.getUniqueId() && viewer.hasPermission("fadah.manage.history"))
                             || viewer.getUniqueId() == owner.getUniqueId()) {
                         new HistoryMenu(viewer, owner, null).open(viewer);
+                    } else {
+                        Sons.UI_ERROR.play(viewer);
                     }
                 });
     }

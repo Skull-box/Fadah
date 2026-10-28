@@ -8,6 +8,7 @@ import info.preva1l.fadah.filters.SortingDirection;
 import info.preva1l.fadah.filters.SortingMethod;
 import info.preva1l.fadah.records.Category;
 import info.preva1l.fadah.records.listing.Listing;
+import info.preva1l.fadah.utils.Sons;
 import info.preva1l.fadah.utils.Text;
 import info.preva1l.fadah.utils.guis.ItemBuilder;
 import info.preva1l.fadah.utils.guis.LayoutService;
@@ -51,6 +52,7 @@ public class MainMenu extends BrowseMenu {
             }
 
             addScrollbarItem(new PaginatedItem(itemBuilder.flags().build(), e -> {
+                Sons.UI_CLICK.play(player);
                 if (category != cat) {
                     this.category = cat;
                 } else {
@@ -72,9 +74,9 @@ public class MainMenu extends BrowseMenu {
                 new ItemBuilder(getLang().getAsMaterial("filter.search.icon", Material.OAK_SIGN))
                         .name(getLang().getStringFormatted("filter.search.name", "&3&lSearch"))
                         .modelData(getLang().getInt("filter.search.model-data"))
-                        .lore(getLang().getLore("filter.search.lore")).build(), e ->
+                        .lore(getLang().getLore("filter.search.lore")).build(), withSound(Sons.UI_CLICK, e ->
                         new InputMenu<>(player, Menus.i().getSearchTitle(), getLang().getString("filter.search.placeholder", "Search Query..."), String.class, search ->
-                                new MainMenu(category, player, search, sortingMethod, sortingDirection).open(player)));
+                                new MainMenu(category, player, search, sortingMethod, sortingDirection).open(player))));
     }
 
     protected void addNavigationButtons() {

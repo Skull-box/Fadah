@@ -3,6 +3,7 @@ package info.preva1l.fadah.guis;
 import info.preva1l.fadah.config.Menus;
 import info.preva1l.fadah.records.listing.Listing;
 import info.preva1l.fadah.utils.Text;
+import info.preva1l.fadah.utils.Sons;
 import info.preva1l.fadah.utils.guis.FastInv;
 import info.preva1l.fadah.utils.guis.ItemBuilder;
 import info.preva1l.fadah.utils.guis.LayoutService;
@@ -28,7 +29,7 @@ public class ShulkerBoxPreviewMenu extends FastInv {
             }
         }
 
-        setItem(31, Menus.i().getCloseButton().itemStack(), e -> returnFunction.run());
+        setItem(31, Menus.i().getCloseButton().itemStack(), withSound(Sons.UI_CLOSE, e -> returnFunction.run()));
 
         setItems(new int[]{27, 28, 29, 30, 32, 33, 34, 35}, Menus.i().getBorder().itemStack());
     }

@@ -12,6 +12,7 @@ import info.preva1l.fadah.multiserver.Payload;
 import info.preva1l.fadah.records.collection.CollectableItem;
 import info.preva1l.fadah.records.collection.CollectionBox;
 import info.preva1l.fadah.security.AwareDataService;
+import info.preva1l.fadah.utils.Sons;
 import info.preva1l.fadah.utils.Text;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
@@ -61,11 +62,13 @@ public final class ImplBidListing extends ActiveListing implements BidListing {
             double requiredAmount = currentBid.bidAmount() + 1;
 
             if (!getCurrency().canAfford(player, requiredAmount)) {
+                Sons.UI_ERROR.play(player);
                 Lang.sendMessage(player, Lang.i().getPrefix() + Lang.i().getErrors().getTooExpensive());
                 return false;
             }
 
             if (currentBid.bidder().equals(player.getUniqueId())) {
+                Sons.UI_ERROR.play(player);
                 Lang.sendMessage(player, Lang.i().getPrefix() + Lang.i().getErrors().getAlreadyHighestBidder());
                 return false;
             }
@@ -105,6 +108,7 @@ public final class ImplBidListing extends ActiveListing implements BidListing {
     @Override
     public CompletableFuture<Void> newBid(@NotNull Player bidder, double bidAmount) {
         if (bidAmount <= 0) {
+            Sons.UI_ERROR.play(bidder);
             Lang.sendMessage(bidder, Lang.i().getPrefix() + Lang.i().getErrors().getBidTooLow());
             return CompletableFuture.completedFuture(null);
         }
@@ -118,11 +122,13 @@ public final class ImplBidListing extends ActiveListing implements BidListing {
 
             Bid mostRecentBid = getCurrentBid();
             if (mostRecentBid.bidAmount() >= bidAmount) {
+                Sons.UI_ERROR.play(bidder);
                 Lang.sendMessage(bidder, Lang.i().getPrefix() + Lang.i().getErrors().getBidTooLow());
                 return;
             }
 
             if (!getCurrency().withdraw(bidder, bidAmount)) {
+                Sons.UI_ERROR.play(bidder);
                 Lang.sendMessage(bidder, Lang.i().getPrefix() + Lang.i().getErrors().getTooExpensive());
                 return;
             }
@@ -152,6 +158,7 @@ public final class ImplBidListing extends ActiveListing implements BidListing {
                     Tuple.of("%item%", itemName),
                     Tuple.of("%price%", formattedPrice)
             );
+            Sons.SHOP_PURCHASE_SMALL.play(bidder);
             bidder.sendMessage(message);
         } catch (Exception e) {
             LOGGER.log(Level.WARNING, "Failed to send bid confirmation", e);

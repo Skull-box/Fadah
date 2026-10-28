@@ -12,6 +12,7 @@ import info.preva1l.fadah.records.collection.ExpiredItems;
 import info.preva1l.fadah.records.history.HistoricItem;
 import info.preva1l.fadah.records.history.History;
 import info.preva1l.fadah.security.AwareDataService;
+import info.preva1l.fadah.utils.Sons;
 import info.preva1l.fadah.utils.Tasks;
 import info.preva1l.fadah.utils.Text;
 import info.preva1l.fadah.utils.TimeUtil;
@@ -64,6 +65,12 @@ public class CollectionMenu extends PaginatedFastInv {
         addPaginationControls();
     }
 
+    @Override
+    protected Sons openSound() {
+        // Collection d'enchères : un stockage. Les annonces expirées gardent le son d'ouverture ordinaire.
+        return expired ? Sons.UI_OPEN : Sons.UI_STORAGE;
+    }
+
     private StorageHolder<CollectableItem> getCurrentItems() {
         return expired
                 ? CacheAccess.getNotNull(ExpiredItems.class, owner.getUniqueId())
@@ -102,14 +109,19 @@ public class CollectionMenu extends PaginatedFastInv {
 
             ItemStack itemStack = item.itemStack();
             if (!tryAddToInventory(player, itemStack)) {
+                Sons.UI_ERROR.play(player);
                 Lang.sendMessage(player, Lang.i().getPrefix() + Lang.i().getErrors().getInventoryFull());
                 return;
             }
 
             getCurrentItems().remove(item);
+            Sons.UI_CLICK.play(player);
             logItemClaim(item);
             updatePagination();
-        }, () -> Lang.sendMessage(player, Lang.i().getPrefix() + Lang.i().getErrors().getOther().replace("%ex%", "Ticking Issue")));
+        }, () -> {
+            Sons.UI_ERROR.play(player);
+            Lang.sendMessage(player, Lang.i().getPrefix() + Lang.i().getErrors().getOther().replace("%ex%", "Ticking Issue"));
+        });
     }
 
     private boolean tryAddToInventory(Player player, ItemStack item) {
@@ -157,7 +169,7 @@ public class CollectionMenu extends PaginatedFastInv {
 
     protected void addNavigationButtons() {
         setItem(getLayout().buttonSlots().getOrDefault(LayoutService.ButtonType.BACK, -1),
-                Menus.i().getBackButton().itemStack(), e ->
-                        new ProfileMenu(player, owner).open(player));
+                Menus.i().getBackButton().itemStack(), withSound(Sons.UI_CLOSE, e ->
+                        new ProfileMenu(player, owner).open(player)));
     }
 }

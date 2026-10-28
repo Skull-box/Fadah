@@ -8,6 +8,7 @@ import info.preva1l.fadah.data.DataService;
 import info.preva1l.fadah.records.collection.CollectableItem;
 import info.preva1l.fadah.records.collection.CollectionBox;
 import info.preva1l.fadah.security.AwareDataService;
+import info.preva1l.fadah.utils.Sons;
 import info.preva1l.fadah.utils.Text;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
@@ -36,6 +37,7 @@ public final class ImplBinListing extends ActiveListing implements BinListing {
     @Override
     public boolean canBuy(@NotNull Player player) {
         if (!getCurrency().canAfford(player, getPrice())) {
+            Sons.UI_ERROR.play(player);
             Lang.sendMessage(player, Lang.i().getPrefix() + Lang.i().getErrors().getTooExpensive());
             return false;
         }
@@ -88,11 +90,13 @@ public final class ImplBinListing extends ActiveListing implements BinListing {
 
     private boolean transferFunds(@NotNull Player buyer, double sellerAmount) {
         if (!getCurrency().canAfford(buyer, this.getPrice())) {
+            Sons.UI_ERROR.play(buyer);
             Lang.sendMessage(buyer, Lang.i().getPrefix() + Lang.i().getErrors().getTooExpensive());
             return false;
         }
 
         if (!getCurrency().withdraw(buyer, this.getPrice())) {
+            Sons.UI_ERROR.play(buyer);
             Lang.sendMessage(buyer, Lang.i().getPrefix() + "Transaction failed: Unable to withdraw funds.");
             return false;
         }
@@ -100,6 +104,7 @@ public final class ImplBinListing extends ActiveListing implements BinListing {
         try {
             if (!getCurrency().add(Bukkit.getOfflinePlayer(this.getOwner()), sellerAmount)) {
                 getCurrency().add(buyer, this.getPrice());
+                Sons.UI_ERROR.play(buyer);
                 Lang.sendMessage(buyer, Lang.i().getPrefix() + "Transaction failed: Unable to pay seller.");
                 return false;
             }
@@ -117,6 +122,7 @@ public final class ImplBinListing extends ActiveListing implements BinListing {
     }
 
     private void sendNotifications(@NotNull Player buyer, ItemStack itemStack, double sellerAmount) {
+        Sons.SHOP_PURCHASE_SMALL.play(buyer);
         Lang.sendMessage(buyer, String.join("\n", Lang.i().getNotifications().getNewItem()));
 
         Component itemName = Text.extractItemName(itemStack);

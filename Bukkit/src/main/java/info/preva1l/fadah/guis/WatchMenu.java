@@ -4,13 +4,13 @@ import info.preva1l.fadah.config.Config;
 import info.preva1l.fadah.config.Lang;
 import info.preva1l.fadah.config.Menus;
 import info.preva1l.fadah.config.misc.Tuple;
+import info.preva1l.fadah.utils.Sons;
 import info.preva1l.fadah.utils.guis.FastInv;
 import info.preva1l.fadah.utils.guis.ItemBuilder;
 import info.preva1l.fadah.utils.guis.LayoutService;
 import info.preva1l.fadah.watcher.AuctionWatcher;
 import info.preva1l.fadah.watcher.Watching;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 
@@ -41,12 +41,12 @@ public class WatchMenu extends FastInv {
                         .modelData(getLang().getInt("search.model-data"))
                         .lore(getLang().getLore("search.lore",
                                 Tuple.of("%current%", watching.getSearch() == null ? Lang.i().getWords().getNone() : watching.getSearch()))
-                        ).build(), e ->
+                        ).build(), withSound(Sons.UI_CLICK, e ->
                         new InputMenu<>(player, Menus.i().getSearchTitle(), getLang().getString("search.placeholder", "Search Query..."), String.class, search -> {
                             watching.setSearch(search);
                             buttons();
                             open(player);
-                        }));
+                        })));
     }
 
     private void setMinPrice() {
@@ -55,13 +55,13 @@ public class WatchMenu extends FastInv {
                         .name(getLang().getStringFormatted("min-price.name"))
                         .modelData(getLang().getInt("min-price.model-data"))
                         .lore(getLang().getLore("min-price.lore",
-                                Tuple.of("%current%", Config.i().getFormatting().numbers().format(watching.getMinPrice())))).build(), e ->
+                                Tuple.of("%current%", Config.i().getFormatting().numbers().format(watching.getMinPrice())))).build(), withSound(Sons.UI_CLICK, e ->
                         new InputMenu<>(player, Menus.i().getSearchTitle(), getLang().getString("min-price.placeholder", "Ex: 100"), Double.class, search -> {
                             if (search == null) search = -1D;
                             watching.setMinPrice(search);
                             buttons();
                             open(player);
-                        }));
+                        })));
     }
 
     private void setMaxPrice() {
@@ -70,13 +70,13 @@ public class WatchMenu extends FastInv {
                         .name(getLang().getStringFormatted("max-price.name"))
                         .modelData(getLang().getInt("max-price.model-data"))
                         .lore(getLang().getLore("max-price.lore",
-                                Tuple.of("%current%", Config.i().getFormatting().numbers().format(watching.getMaxPrice())))).build(), e ->
+                                Tuple.of("%current%", Config.i().getFormatting().numbers().format(watching.getMaxPrice())))).build(), withSound(Sons.UI_CLICK, e ->
                         new InputMenu<>(player, Menus.i().getSearchTitle(), getLang().getString("max-price.placeholder", "Ex: 10k"), Double.class, search -> {
                             if (search == null) search = -1D;
                             watching.setMaxPrice(search);
                             buttons();
                             open(player);
-                        }));
+                        })));
     }
 
     private void setComplete() {
@@ -90,7 +90,7 @@ public class WatchMenu extends FastInv {
                         .build(), e -> {
                     AuctionWatcher.watch(watching);
                     e.getWhoClicked().closeInventory();
-                    player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1.5f, 1.5f);
+                    Sons.UI_CONFIRM.play(player);
                 });
     }
 }

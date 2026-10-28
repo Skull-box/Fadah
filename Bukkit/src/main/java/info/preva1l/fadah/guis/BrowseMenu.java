@@ -13,6 +13,7 @@ import info.preva1l.fadah.records.listing.BinListing;
 import info.preva1l.fadah.records.listing.Listing;
 import info.preva1l.fadah.utils.CooldownManager;
 import info.preva1l.fadah.utils.Text;
+import info.preva1l.fadah.utils.Sons;
 import info.preva1l.fadah.utils.TimeUtil;
 import info.preva1l.fadah.utils.guis.ItemBuilder;
 import info.preva1l.fadah.utils.guis.LayoutService;
@@ -145,6 +146,7 @@ public abstract class BrowseMenu extends ScrollBarFastInv {
 
         if (event.isShiftClick() && canCancelListing(clicker, listing)) {
             listing.cancel(clicker).thenRun(() -> {
+                Sons.UI_CLICK.play(clicker);
                 updatePagination();
                 processingListings.remove(listing);
             });
@@ -160,6 +162,7 @@ public abstract class BrowseMenu extends ScrollBarFastInv {
         // Bedrock : pas de Shift+clic, le vendeur retire son annonce par simple clic
         if (listing.isOwner(clicker) && listing.isActive()) {
             listing.cancel(clicker).thenRun(() -> {
+                Sons.UI_CLICK.play(clicker);
                 updatePagination();
                 processingListings.remove(listing);
             });
@@ -234,9 +237,9 @@ public abstract class BrowseMenu extends ScrollBarFastInv {
                 new ItemBuilder(getLang().getAsMaterial("filter.search.icon", Material.OAK_SIGN))
                         .name(getLang().getStringFormatted("filter.search.name", "&3&lSearch"))
                         .modelData(getLang().getInt("filter.search.model-data"))
-                        .lore(getLang().getLore("filter.search.lore")).build(), e ->
+                        .lore(getLang().getLore("filter.search.lore")).build(), withSound(Sons.UI_CLICK, e ->
                         new InputMenu<>(player, Menus.i().getSearchTitle(), getLang().getString("filter.search.placeholder", "Search Query..."), String.class, search ->
-                                new ViewListingsMenu(player, owner, search, sortingMethod, sortingDirection) .open(player)));
+                                new ViewListingsMenu(player, owner, search, sortingMethod, sortingDirection) .open(player))));
     }
 
     private void addFilterTypeButton() {
@@ -257,6 +260,7 @@ public abstract class BrowseMenu extends ScrollBarFastInv {
 
     private void handleFilterTypeClick(InventoryClickEvent e) {
         if (CooldownManager.hasCooldown(CooldownManager.Cooldown.SORT, player)) {
+            Sons.UI_ERROR.play(player);
             Lang.sendMessage(player, Lang.i().getPrefix() + Lang.i().getErrors().getCooldown()
                     .replace("%time%", CooldownManager.getCooldownString(CooldownManager.Cooldown.SORT, player)));
             return;
@@ -266,10 +270,12 @@ public abstract class BrowseMenu extends ScrollBarFastInv {
 
         if (e.isLeftClick() && sortingMethod.previous() != null) {
             this.sortingMethod = sortingMethod.previous();
+            Sons.UI_CLICK.play(player);
             updatePagination();
             addFilterButtons();
         } else if (e.isRightClick() && sortingMethod.next() != null) {
             this.sortingMethod = sortingMethod.next();
+            Sons.UI_CLICK.play(player);
             updatePagination();
             addFilterButtons();
         }
@@ -302,12 +308,14 @@ public abstract class BrowseMenu extends ScrollBarFastInv {
 
     private void handleDirectionToggle(InventoryClickEvent e) {
         if (CooldownManager.hasCooldown(CooldownManager.Cooldown.SORT, player)) {
+            Sons.UI_ERROR.play(player);
             Lang.sendMessage(player, Lang.i().getPrefix() + Lang.i().getErrors().getCooldown()
                     .replace("%time%", CooldownManager.getCooldownString(CooldownManager.Cooldown.SORT, player)));
             return;
         }
 
         CooldownManager.startCooldown(CooldownManager.Cooldown.SORT, player);
+        Sons.UI_CLICK.play(player);
         this.sortingDirection = sortingDirection == SortingDirection.ASCENDING
                 ? SortingDirection.DESCENDING
                 : SortingDirection.ASCENDING;

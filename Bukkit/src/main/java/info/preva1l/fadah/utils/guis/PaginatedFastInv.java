@@ -1,6 +1,7 @@
 package info.preva1l.fadah.utils.guis;
 
 import info.preva1l.fadah.config.Menus;
+import info.preva1l.fadah.utils.Sons;
 import info.preva1l.fadah.utils.Tasks;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
@@ -47,6 +48,7 @@ public abstract class PaginatedFastInv extends FastInv {
             return;
         }
         page++;
+        Sons.UI_PAGE.play(player);
         populatePage();
         addPaginationControls();
     }
@@ -56,6 +58,7 @@ public abstract class PaginatedFastInv extends FastInv {
             return;
         }
         page--;
+        Sons.UI_PAGE.play(player);
         populatePage();
         addPaginationControls();
     }

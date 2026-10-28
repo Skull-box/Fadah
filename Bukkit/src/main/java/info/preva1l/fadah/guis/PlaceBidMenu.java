@@ -4,6 +4,7 @@ import info.preva1l.fadah.config.Config;
 import info.preva1l.fadah.config.Lang;
 import info.preva1l.fadah.config.misc.Tuple;
 import info.preva1l.fadah.records.listing.BidListing;
+import info.preva1l.fadah.utils.Sons;
 import info.preva1l.fadah.utils.guis.ItemBuilder;
 import info.preva1l.fadah.utils.guis.LayoutService;
 import org.bukkit.Material;
@@ -43,7 +44,7 @@ public class PlaceBidMenu extends PurchaseMenu {
                         .lore(getLang().getLore("adjust-bid.lore",
                                 Tuple.of("%current%", Config.i().getFormatting().numbers().format(listing.getPrice())),
                                 Tuple.of("%bid%", Config.i().getFormatting().numbers().format(amount))))
-                        .build(), e ->
+                        .build(), withSound(Sons.UI_CLICK, e ->
                     new InputMenu<>(
                             player,
                             getLang().getString("input.title", ""),
@@ -51,12 +52,13 @@ public class PlaceBidMenu extends PurchaseMenu {
                             Double.class,
                             a -> {
                                 if (a == null || a <= listing.getPrice()) {
+                                    Sons.UI_ERROR.play(player);
                                     Lang.sendMessage(player, Lang.i().getErrors().getBidTooLow());
                                     return;
                                 }
                                 new PlaceBidMenu(listing, player, a, returnFunction).open(player);
                             }
                     )
-                );
+                ));
     }
 }
