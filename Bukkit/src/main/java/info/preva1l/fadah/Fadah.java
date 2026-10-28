@@ -5,6 +5,7 @@ import info.preva1l.fadah.api.BukkitAuctionHouseAPI;
 import info.preva1l.fadah.listeners.BombyListener;
 import info.preva1l.fadah.listeners.PlayerListener;
 import info.preva1l.fadah.utils.Text;
+import info.preva1l.fadah.utils.Sons;
 import info.preva1l.fadah.utils.guis.FastInvManager;
 import info.preva1l.fadah.warnings.LeafWarning;
 import info.preva1l.trashcan.extension.BasePlugin;
@@ -29,6 +30,7 @@ public final class Fadah extends BasePlugin {
 
         getServer().getPluginManager().registerEvents(new PlayerListener(), this);
         getServer().getPluginManager().registerEvents(new BombyListener(), this);
+        getServer().getPluginManager().registerEvents(new Sons.Navigation(), this);
         FastInvManager.register(this);
 
         Text.list(List.of(

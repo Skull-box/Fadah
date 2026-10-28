@@ -45,6 +45,7 @@ public class WatchMenu extends FastInv {
                         new InputMenu<>(player, Menus.i().getSearchTitle(), getLang().getString("search.placeholder", "Search Query..."), String.class, search -> {
                             watching.setSearch(search);
                             buttons();
+                            Sons.UI_CLICK.play(player);
                             open(player);
                         })));
     }
@@ -60,6 +61,7 @@ public class WatchMenu extends FastInv {
                             if (search == null) search = -1D;
                             watching.setMinPrice(search);
                             buttons();
+                            Sons.UI_CLICK.play(player);
                             open(player);
                         })));
     }
@@ -75,6 +77,7 @@ public class WatchMenu extends FastInv {
                             if (search == null) search = -1D;
                             watching.setMaxPrice(search);
                             buttons();
+                            Sons.UI_CLICK.play(player);
                             open(player);
                         })));
     }

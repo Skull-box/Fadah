@@ -56,6 +56,7 @@ public class PlaceBidMenu extends PurchaseMenu {
                                     Lang.sendMessage(player, Lang.i().getErrors().getBidTooLow());
                                     return;
                                 }
+                                Sons.UI_CLICK.play(player);
                                 new PlaceBidMenu(listing, player, a, returnFunction).open(player);
                             }
                     )

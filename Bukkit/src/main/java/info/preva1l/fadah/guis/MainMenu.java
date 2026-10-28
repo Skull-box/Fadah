@@ -76,7 +76,10 @@ public class MainMenu extends BrowseMenu {
                         .modelData(getLang().getInt("filter.search.model-data"))
                         .lore(getLang().getLore("filter.search.lore")).build(), withSound(Sons.UI_CLICK, e ->
                         new InputMenu<>(player, Menus.i().getSearchTitle(), getLang().getString("filter.search.placeholder", "Search Query..."), String.class, search ->
-                                new MainMenu(category, player, search, sortingMethod, sortingDirection).open(player))));
+                        {
+                            Sons.UI_CLICK.play(player);
+                            new MainMenu(category, player, search, sortingMethod, sortingDirection).open(player);
+                        })));
     }
 
     protected void addNavigationButtons() {
@@ -85,6 +88,6 @@ public class MainMenu extends BrowseMenu {
                         .name(getLang().getStringFormatted("profile-button.name", "&e&lYour Profile"))
                         .addLore(getLang().getLore("profile-button.lore"))
                         .modelData(getLang().getInt("profile-button.model-data"))
-                        .build(), e -> new ProfileMenu(player, player).open(player));
+                        .build(), withSound(Sons.UI_CLICK, e -> new ProfileMenu(player, player).open(player)));
     }
 }

@@ -39,7 +39,7 @@ public class ViewListingsMenu extends BrowseMenu {
 
     protected void addNavigationButtons() {
         setItem(getLayout().buttonSlots().getOrDefault(LayoutService.ButtonType.BACK, -1),
-                Menus.i().getBackButton().itemStack(), withSound(Sons.UI_CLOSE, e -> new ProfileMenu(player, owner).open(player)));
+                Menus.i().getBackButton().itemStack(), withSound(Sons.UI_CLICK, e -> new ProfileMenu(player, owner).open(player)));
     }
 
     @Override

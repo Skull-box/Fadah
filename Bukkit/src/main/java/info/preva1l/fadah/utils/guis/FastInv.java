@@ -229,7 +229,7 @@ public class FastInv implements InventoryHolder {
     void handleOpen(InventoryOpenEvent e) {
         Sons openSound = openSound();
         if (openSound != null && e.getPlayer() instanceof Player p) {
-            openSound.play(p);
+            openSound.ouverture(p);
         }
 
         onOpen(e);

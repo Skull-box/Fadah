@@ -36,7 +36,7 @@ public class ProfileMenu extends FastInv {
         fillers();
         setItem(getLayout().buttonSlots().getOrDefault(LayoutService.ButtonType.BACK, -1),
                 Menus.i().getBackButton().itemStack(),
-                withSound(Sons.UI_CLOSE, e -> new MainMenu(null, viewer, null, null, null).open(viewer)));
+                withSound(Sons.UI_CLICK, e -> new MainMenu(null, viewer, null, null, null).open(viewer)));
 
         setItem(getLayout().buttonSlots().getOrDefault(LayoutService.ButtonType.PROFILE_SUMMARY, -1),
                 new ItemBuilder(getLang().getAsMaterial("profile-button.icon")).skullOwner(owner)
@@ -78,6 +78,7 @@ public class ProfileMenu extends FastInv {
                         ).build(), e -> {
                     if ((viewer.getUniqueId() != owner.getUniqueId() && viewer.hasPermission("fadah.manage.active-listings"))
                             || viewer.getUniqueId() == owner.getUniqueId()) {
+                        Sons.UI_CLICK.play(viewer);
                         new ViewListingsMenu(
                                 viewer,
                                 owner,
@@ -111,6 +112,7 @@ public class ProfileMenu extends FastInv {
                         ).build(), e -> {
                     if ((viewer.getUniqueId() != owner.getUniqueId() && viewer.hasPermission("fadah.manage.collection-box"))
                             || viewer.getUniqueId() == owner.getUniqueId()) {
+                        Sons.UI_CLICK.play(viewer);
                         new CollectionMenu(viewer, owner, LayoutService.MenuType.COLLECTION_BOX).open(viewer);
                     } else {
                         Sons.UI_ERROR.play(viewer);
@@ -138,6 +140,7 @@ public class ProfileMenu extends FastInv {
                         ).build(), e -> {
                     if ((viewer.getUniqueId() != owner.getUniqueId() && viewer.hasPermission("fadah.manage.expired-listings"))
                             || viewer.getUniqueId() == owner.getUniqueId()) {
+                        Sons.UI_CLICK.play(viewer);
                         new CollectionMenu(viewer, owner, LayoutService.MenuType.EXPIRED_LISTINGS).open(viewer);
                     } else {
                         Sons.UI_ERROR.play(viewer);
@@ -163,6 +166,7 @@ public class ProfileMenu extends FastInv {
                                 Tuple.of("%username%", owner.getName()))).build(), e -> {
                     if ((viewer.getUniqueId() != owner.getUniqueId() && viewer.hasPermission("fadah.manage.history"))
                             || viewer.getUniqueId() == owner.getUniqueId()) {
+                        Sons.UI_CLICK.play(viewer);
                         new HistoryMenu(viewer, owner, null).open(viewer);
                     } else {
                         Sons.UI_ERROR.play(viewer);

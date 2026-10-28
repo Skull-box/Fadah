@@ -140,7 +140,7 @@ public class HistoryMenu extends PaginatedFastInv {
 
     private void addNavigationButtons() {
         setItem(getLayout().buttonSlots().getOrDefault(LayoutService.ButtonType.BACK, -1),
-                Menus.i().getBackButton().itemStack(), withSound(Sons.UI_CLOSE, e -> new ProfileMenu(viewer, owner).open(viewer)));
+                Menus.i().getBackButton().itemStack(), withSound(Sons.UI_CLICK, e -> new ProfileMenu(viewer, owner).open(viewer)));
 
         setItem(getLayout().buttonSlots().getOrDefault(LayoutService.ButtonType.SEARCH, -1),
                 new ItemBuilder(getLang().getAsMaterial("search.icon", Material.OAK_SIGN))
@@ -148,7 +148,10 @@ public class HistoryMenu extends PaginatedFastInv {
                         .modelData(getLang().getInt("search.model-data"))
                         .lore(getLang().getLore("search.lore")).build(), withSound(Sons.UI_CLICK, e ->
                         new InputMenu<>(viewer, Menus.i().getSearchTitle(), getLang().getString("search.placeholder", "Ex: 21/04/2024 22:26"), String.class,
-                                search -> new HistoryMenu(viewer, owner, search).open(viewer))));
+                                search -> {
+                                    Sons.UI_CLICK.play(viewer);
+                                    new HistoryMenu(viewer, owner, search).open(viewer);
+                                })));
     }
 
     private List<HistoricItem> getAndFilterHistoricItems() {

@@ -3,6 +3,13 @@ package info.preva1l.fadah.utils;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.Inventory;
 
 import java.util.Map;
 import java.util.UUID;
@@ -16,6 +23,9 @@ import java.util.concurrent.ConcurrentHashMap;
  * <p>
  * Un seul son par geste : un second son pour le même joueur dans les {@value #GESTURE_WINDOW_MS} ms est ignoré.
  * Un bouton qui joue son propre son (Annuler, Retour) puis rouvre un menu n'entend donc pas aussi le son d'ouverture.
+ * <p>
+ * Les sons d'ouverture ne se jouent que pour un menu ouvert directement (commande, objet) : voir
+ * {@link #ouverture(Player)}. Un menu atteint par un clic reste muet, le bouton cliqué joue {@link #UI_CLICK}.
  */
 public enum Sons {
 
@@ -43,6 +53,9 @@ public enum Sons {
     SHOP_PURCHASE_SMALL("shop.purchase.small", 0.55f);
 
     private static final long GESTURE_WINDOW_MS = 200;
+    /** Fenêtre après un clic de menu pendant laquelle une ouverture compte comme une navigation. */
+    private static final long NAVIGATION_WINDOW_MS = 1000;
+    private static final Map<UUID, Long> LAST_MENU_CLICK = new ConcurrentHashMap<>();
     private static final Map<UUID, Long> LAST_PLAYED = new ConcurrentHashMap<>();
 
     private final Sound sound;
@@ -52,6 +65,47 @@ public enum Sons {
         // en 1.21.4, repli sur VOICE (curseur « Voix/Parole », inutilisé par le jeu vanilla), décidé le
         // 28 oct. 2026. Au passage du réseau en 1.21.6 ou plus, remplacer par Sound.Source.UI.
         this.sound = Sound.sound(Key.key("skullbox", path), Sound.Source.VOICE, volume, 1.0f);
+    }
+
+    /** Vrai si le joueur a cliqué dans un menu (tout plugin) il y a moins d'une seconde. */
+    public static boolean enNavigation(Player player) {
+        Long at = LAST_MENU_CLICK.get(player.getUniqueId());
+        return at != null && System.currentTimeMillis() - at < NAVIGATION_WINDOW_MS;
+    }
+
+    /**
+     * Joue ce son d'ouverture de menu, sauf si le joueur navigue : un clic de menu vient d'avoir lieu, le bouton a
+     * joué son propre clic et le menu d'arrivée reste muet.
+     */
+    public void ouverture(Player player) {
+        if (player != null && !enNavigation(player)) {
+            play(player);
+        }
+    }
+
+    /**
+     * Détecteur de navigation : note tout clic dans la partie haute d'un menu (n'importe quel plugin, zMenu compris)
+     * au tout début du traitement, avant que le menu suivant ne s'ouvre. Copie locale du détecteur de SkullboxCore.
+     */
+    public static final class Navigation implements Listener {
+
+        @EventHandler(priority = EventPriority.LOWEST)
+        public void onMenuClick(InventoryClickEvent event) {
+            Inventory top = event.getView().getTopInventory();
+            InventoryType type = top.getType();
+            if (type == InventoryType.CRAFTING || type == InventoryType.CREATIVE || type == InventoryType.PLAYER) {
+                return; // inventaire du joueur seul : pas un menu
+            }
+            if (event.getClickedInventory() != top) {
+                return; // clic dans la partie basse (inventaire du joueur)
+            }
+            LAST_MENU_CLICK.put(event.getWhoClicked().getUniqueId(), System.currentTimeMillis());
+        }
+
+        @EventHandler(priority = EventPriority.MONITOR)
+        public void onQuit(PlayerQuitEvent event) {
+            LAST_MENU_CLICK.remove(event.getPlayer().getUniqueId());
+        }
     }
 
     /** Joue le son pour ce joueur seulement (sans effet si un son d'interface vient déjà de lui être joué). */

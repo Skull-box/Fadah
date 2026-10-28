@@ -155,6 +155,7 @@ public abstract class BrowseMenu extends ScrollBarFastInv {
 
         if (event.isRightClick() && isShulkerBox) {
             processingListings.remove(listing);
+            Sons.UI_CLICK.play(clicker);
             new ShulkerBoxPreviewMenu(listing, () -> open(player)).open(player);
             return;
         }
@@ -174,6 +175,7 @@ public abstract class BrowseMenu extends ScrollBarFastInv {
             return;
         }
 
+        Sons.UI_CLICK.play(clicker);
         if (isBidListing) {
             new PlaceBidMenu((BidListing) listing, player, () -> open(player)).open(player);
         } else {
@@ -239,7 +241,10 @@ public abstract class BrowseMenu extends ScrollBarFastInv {
                         .modelData(getLang().getInt("filter.search.model-data"))
                         .lore(getLang().getLore("filter.search.lore")).build(), withSound(Sons.UI_CLICK, e ->
                         new InputMenu<>(player, Menus.i().getSearchTitle(), getLang().getString("filter.search.placeholder", "Search Query..."), String.class, search ->
-                                new ViewListingsMenu(player, owner, search, sortingMethod, sortingDirection) .open(player))));
+                        {
+                            Sons.UI_CLICK.play(player);
+                            new ViewListingsMenu(player, owner, search, sortingMethod, sortingDirection).open(player);
+                        })));
     }
 
     private void addFilterTypeButton() {
