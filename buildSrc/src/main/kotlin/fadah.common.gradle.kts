@@ -9,6 +9,9 @@ plugins {
 }
 
 repositories {
+    // multilib est chargé au runtime par le libloader, qui retient le PREMIER dépôt où il le trouve : Clojars doit
+    // passer avant libs/maven-repo, sinon libraries.json pointe vers ce dépôt file: du runner et le plugin ne charge pas.
+    maven(url = "https://repo.clojars.org/") { content { includeGroup("com.github.puregero") } }
     maven { url = uri("$rootDir/libs/maven-repo") }
     mavenLocal()
     mavenCentral()
