@@ -61,10 +61,8 @@ public enum Sons {
     private final Sound sound;
 
     Sons(String path, float volume) {
-        // Catégorie des sons d'interface. La catégorie UI n'existe qu'à partir de Minecraft 1.21.6 :
-        // en 1.21.4, repli sur VOICE (curseur « Voix/Parole », inutilisé par le jeu vanilla), décidé le
-        // 28 oct. 2026. Au passage du réseau en 1.21.6 ou plus, remplacer par Sound.Source.UI.
-        this.sound = Sound.sound(Key.key("skullbox", path), Sound.Source.VOICE, volume, 1.0f);
+        // Catégorie des sons d'interface (UI, disponible depuis Minecraft 1.21.6).
+        this.sound = Sound.sound(Key.key("skullbox", path), Sound.Source.UI, volume, 1.0f);
     }
 
     /** Vrai si le joueur a cliqué dans un menu (tout plugin) il y a moins d'une seconde. */
