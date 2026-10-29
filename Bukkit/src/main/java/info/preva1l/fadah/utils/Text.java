@@ -117,16 +117,20 @@ public class Text {
         if (!result.children().isEmpty()) {
             List<Component> children = new ArrayList<>(result.children().size());
             for (Component child : result.children()) {
-                ClickEvent event = child.clickEvent();
-                if (event != null) {
-                    String eventValue = event.value();
+                // Adventure 5 : l'évènement de clic porte un payload typé ; seul le payload texte (URL, commande,
+                // presse-papiers…) contient des placeholders.
+                ClickEvent<?> event = child.clickEvent();
+                if (event != null && event.payload() instanceof ClickEvent.Payload.Text payload) {
+                    String eventValue = payload.value();
                     for (Tuple<String, Object> replacement : args) {
                         Object value = replacement.second();
                         String replaceWith = value instanceof TextComponent tc ? tc.content() : String.valueOf(value);
                         eventValue = eventValue.replace(replacement.first(), replaceWith);
                     }
-                    if (!eventValue.equals(event.value())) {
-                        child = child.clickEvent(ClickEvent.clickEvent(event.action(), eventValue));
+                    if (!eventValue.equals(payload.value())) {
+                        @SuppressWarnings("unchecked")
+                        ClickEvent.Action<ClickEvent.Payload.Text> action = (ClickEvent.Action<ClickEvent.Payload.Text>) event.action();
+                        child = child.clickEvent(ClickEvent.clickEvent(action, ClickEvent.Payload.string(eventValue)));
                     }
                 }
                 children.add(replace(child, args));
