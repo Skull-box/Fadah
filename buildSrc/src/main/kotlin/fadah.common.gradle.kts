@@ -21,10 +21,10 @@ repositories {
 }
 
 dependencies {
-    paper("1.21.4-R0.1-SNAPSHOT")
+    paper("26.2.build.134-stable")
 
-    compileOnly("org.projectlombok:lombok:1.18.38")
-    annotationProcessor("org.projectlombok:lombok:1.18.38")
+    compileOnly("org.projectlombok:lombok:1.18.42")
+    annotationProcessor("org.projectlombok:lombok:1.18.42")
 
     compileOnly("org.jetbrains:annotations:26.0.2")
     annotationProcessor("org.jetbrains:annotations:26.0.2")
@@ -34,8 +34,8 @@ dependencies {
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.12.2")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.12.2")
     testCompileOnly("org.jetbrains:annotations:26.0.2")
-    testCompileOnly("org.projectlombok:lombok:1.18.38")
-    testAnnotationProcessor("org.projectlombok:lombok:1.18.38")
+    testCompileOnly("org.projectlombok:lombok:1.18.42")
+    testAnnotationProcessor("org.projectlombok:lombok:1.18.42")
 }
 
 configurations.all {
@@ -54,7 +54,7 @@ tasks {
         options.compilerArgs.add("-parameters")
         options.isFork = true
         options.encoding = "UTF-8"
-        options.release = 21
+        options.release = 25
     }
 
     register<Jar>("sourcesJar") {

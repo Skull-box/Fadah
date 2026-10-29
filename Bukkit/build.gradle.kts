@@ -25,6 +25,10 @@ repositories {
     maven(url = "https://nexus.neetgames.com/repository/maven-releases/")
     // multilib (com.github.puregero) et ses sous-modules : JitPack répond 401 (dépôt renommé), Clojars les sert.
     maven(url = "https://repo.clojars.org/")
+    // AnvilGUI : le dépôt codemc s'arrête à 1.10.10-SNAPSHOT (sans Minecraft 26) ; l'amont publie désormais sur mvn.wesjd.net.
+    maven(url = "https://mvn.wesjd.net/") { content { includeGroup("net.wesjd") } }
+    // nightcore (Pair, requis par les signatures de CoinsEngine) : javac 25 refuse « Cannot attach type annotations »
+    maven(url = "https://repo.nightexpressdev.com/releases/") { content { includeGroup("su.nightexpress.nightcore") } }
 }
 
 dependencies {
@@ -57,6 +61,11 @@ dependencies {
     dependency(libs.zauctionhouse(), "zAuctionHouseV3") { required = false }
     dependency(files("../libs/AuctionHouse-1.20.4-3.7.1.jar"), "AuctionHouse") { required = false }
     compileOnly(files("../libs/AkarianAuctionHouse-1.3.1-b6.jar"))
+
+    // Classes absentes des signatures de CoinsEngine et RedisEconomy : javac 25 refuse « Cannot attach type annotations »
+    // (class file not found) là où javac 21 laissait passer. Compilation seule, rien n'entre dans le jar.
+    compileOnly(libs.nightcore) { isTransitive = false }
+    compileOnly(libs.lettuce) { isTransitive = false }
 }
 
 tasks.withType<ShadowJar> {

@@ -8,10 +8,12 @@ mongo = "5.6.1"
 
 
 redisson = "3.52.0"
-adventure = "4.24.0"
+adventure = "5.2.0"
 influxdb = "7.3.0"
 multilib = "1.2.5"
-anvilgui = "1.10.9-SNAPSHOT"
+anvilgui = "1.10.13-SNAPSHOT"
+nightcore = "2.16.7"
+lettuce = "6.9.0.RELEASE"
 
 placeholderapi = "2.11.6"
 luckperms = "5.5"
@@ -44,6 +46,8 @@ adventure-gson = { module = "net.kyori:adventure-text-serializer-gson", version.
 
 influxdb = { module = "com.influxdb:influxdb-client-java", version.ref = "influxdb" }
 multilib = { module = "com.github.puregero:multilib", version.ref = "multilib" }
+nightcore = { module = "su.nightexpress.nightcore:main", version.ref = "nightcore" }
+lettuce = { module = "io.lettuce:lettuce-core", version.ref = "lettuce" }
 anvilgui = { module = "net.wesjd:anvilgui", version.ref = "anvilgui" }
 
 placeholderapi = { module = "me.clip:placeholderapi", version.ref = "placeholderapi" }

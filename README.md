@@ -66,7 +66,7 @@ project on your machine), copy `libs/maven-repo/*` into `~/.m2/repository/`, or 
 
 ## Compiler en local
 
-Fork du réseau Skullbox. Prérequis : JDK 21 (le wrapper Gradle 8.14 est dans le dépôt, rien d'autre à installer).
+Fork du réseau Skullbox. Prérequis : JDK 25 (le wrapper Gradle 9.4.1 est dans le dépôt, rien d'autre à installer).
 Aucun jeton n'est nécessaire : Fadah ne lit aucun paquet privé (les dépendances viennent de dépôts publics, dont
 Clojars pour `multilib`, et de `libs/maven-repo/`).
 
@@ -80,7 +80,7 @@ lancer `clean` : le descripteur n'est pas régénéré quand seule la version ch
 
 ## CI/CD (Skull-box)
 
-Fichiers : `.github/workflows/ci.yml`, `.github/scripts/`, `.releaserc.json`. Runner `blacksmith-2vcpu-ubuntu-2404`, JDK 21.
+Fichiers : `.github/workflows/ci.yml`, `.github/scripts/`, `.releaserc.json`. Runner `blacksmith-2vcpu-ubuntu-2404`, JDK 25.
 Ils remplacent les workflows de l'amont (`test.yml`, `publish.yml`).
 
 - **Chaque push et PR** : `./gradlew clean build` (tests compris). Une PR ne publie rien.

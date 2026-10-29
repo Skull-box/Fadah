@@ -49,11 +49,11 @@ jobs:
 
       # Gradle n'utilise pas settings.xml : pas de server-id, les identifiants de publication passent par
       # l'environnement (MAVEN_USERNAME / MAVEN_TOKEN).
-      - name: JDK 21 (Temurin) + cache Gradle
+      - name: JDK 25 (Temurin) + cache Gradle
         uses: actions/setup-java@v5
         with:
           distribution: temurin
-          java-version: '21'
+          java-version: '25'
           cache: gradle
 
       - name: Node 22 (semantic-release)
