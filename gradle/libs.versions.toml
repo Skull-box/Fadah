@@ -11,6 +11,9 @@ redisson = "3.52.0"
 adventure = "5.2.0"
 influxdb = "7.3.0"
 multilib = "1.2.5"
+# Cloud : la 2.0.0-beta.10 de Trashcan ne trouve pas ItemInput#createItemStack sur Minecraft 26.x (corrigé en 2.0.1)
+cloud = "2.0.1"
+cloud-core = "2.1.0"
 anvilgui = "1.10.13-SNAPSHOT"
 nightcore = "2.16.7"
 lettuce = "6.9.0.RELEASE"
@@ -45,6 +48,9 @@ redisson = { module = "org.redisson:redisson", version.ref = "redisson" }
 adventure-gson = { module = "net.kyori:adventure-text-serializer-gson", version.ref = "adventure" }
 
 influxdb = { module = "com.influxdb:influxdb-client-java", version.ref = "influxdb" }
+cloud-paper = { module = "org.incendo:cloud-paper", version.ref = "cloud" }
+cloud-minecraft-extras = { module = "org.incendo:cloud-minecraft-extras", version.ref = "cloud" }
+cloud-annotations = { module = "org.incendo:cloud-annotations", version.ref = "cloud-core" }
 multilib = { module = "com.github.puregero:multilib", version.ref = "multilib" }
 nightcore = { module = "su.nightexpress.nightcore:main", version.ref = "nightcore" }
 lettuce = { module = "io.lettuce:lettuce-core", version.ref = "lettuce" }

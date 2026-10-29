@@ -12,8 +12,6 @@ public class VaultCurrency implements Currency {
     private final String id = "vault";
     private final String requiredPlugin = "Vault";
 
-    private Economy economy;
-
     @Override
     public String getName() {
         return CurrencySettings.i().getVault().getName();
@@ -31,39 +29,50 @@ public class VaultCurrency implements Currency {
 
     @Override
     public boolean withdraw(OfflinePlayer player, double amountToTake) {
-        if (economy == null) {
-            throw new RuntimeException("Vault has no compatible economy plugin.");
-        }
-        return economy.withdrawPlayer(player, amountToTake).transactionSuccess();
+        return requireEconomy().withdrawPlayer(player, amountToTake).transactionSuccess();
     }
 
     @Override
     public boolean add(OfflinePlayer player, double amountToAdd) {
-        if (economy == null) {
-            throw new RuntimeException("Vault has no compatible economy plugin.");
-        }
-        return economy.depositPlayer(player, amountToAdd).transactionSuccess();
+        return requireEconomy().depositPlayer(player, amountToAdd).transactionSuccess();
     }
 
 
     @Override
     public double getBalance(OfflinePlayer player) {
+        return requireEconomy().getBalance(player);
+    }
+
+    /**
+     * Le fournisseur d'économie enregistré auprès de Vault, ou {@code null} s'il n'y en a pas (encore).
+     * <p>
+     * Relu à chaque appel : le plugin d'économie peut s'activer après Fadah (ordre de chargement, fournisseur
+     * enregistré tardivement ou remplacé), et un fournisseur gardé en cache serait alors absent ou périmé.
+     *
+     * @return l'économie Vault courante, ou null.
+     */
+    public Economy getEconomy() {
+        RegisteredServiceProvider<Economy> rsp = Bukkit.getServer().getServicesManager().getRegistration(Economy.class);
+        return rsp == null ? null : rsp.getProvider();
+    }
+
+    private Economy requireEconomy() {
+        Economy economy = getEconomy();
         if (economy == null) {
             throw new RuntimeException("Vault has no compatible economy plugin.");
         }
-        return economy.getBalance(player);
+        return economy;
     }
 
+    /**
+     * Vault seul suffit au chargement : le fournisseur d'économie (SkullboxEssentials, EssentialsX...) peut
+     * s'enregistrer après Fadah, il est donc résolu à l'usage et non ici.
+     */
     @Override
     public boolean preloadChecks() {
-        RegisteredServiceProvider<Economy> rsp = Bukkit.getServer().getServicesManager().getRegistration(Economy.class);
-        if (rsp == null) {
-            CurrencyService.instance.logger.severe("---------------------------------------------------------");
-            CurrencyService.instance.logger.severe("Cannot enable vault currency! No Economy Plugin Installed");
-            CurrencyService.instance.logger.severe("---------------------------------------------------------");
-            return false;
+        if (getEconomy() == null) {
+            CurrencyService.instance.logger.warning("Vault has no Economy provider yet, it will be looked up when the currency is used.");
         }
-        economy = rsp.getProvider();
         return true;
     }
 }

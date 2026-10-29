@@ -39,6 +39,11 @@ dependencies {
     library(libs.redisson)
 
     library(libs.multilib)
+    // Cloud : versions de Fadah, prioritaires sur celles de Trashcan (FadahLibraryLoader). La 2.0.0-beta.10 de Trashcan
+    // plante sur Minecraft 26.x (ItemStackParser : pas de createItemStack(int) cherché sur ItemInput).
+    library(libs.cloud.paper)
+    library(libs.cloud.minecraft.extras)
+    library(libs.cloud.annotations)
     library(libs.anvilgui) { setRemapped(true) }
     library(libs.adventure.gson)
     library(libs.influxdb)
@@ -69,6 +74,9 @@ dependencies {
 }
 
 tasks.withType<ShadowJar> {
+    // info.preva1l.trashcan.Version (sources du projet) est une copie corrigée de celle des jars Trashcan vendus : la
+    // première entrée gagne, et les classes du projet passent avant les dépendances.
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     relocate("info.preva1l.hooker", "info.preva1l.fadah.hooks.lib")
     relocate("info.preva1l.trashcan", "info.preva1l.fadah.trashcan")
 }
@@ -78,7 +86,8 @@ paper {
     website = "https://docs.preva1l.info/fadah/"
     author = "Preva1l"
     main = rootProject.group.toString() + ".Fadah"
-    loader = "info.preva1l.fadah.trashcan.extension.libloader.BaseLibraryLoader"
+    // Chargeur propre à Fadah : Paper 26 refuse Maven Central comme CDN (BaseLibraryLoader de Trashcan, voir FadahLibraryLoader).
+    loader = "info.preva1l.fadah.FadahLibraryLoader"
     foliaSupported = true
     apiVersion = "1.21"
 
